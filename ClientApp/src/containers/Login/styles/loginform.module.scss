@@ -1,0 +1,77 @@
+.login-page__container {
+  display: flex;
+  justify-content: space-around;
+  background: linear-gradient(90deg, #37d5d6 0%, #36096d 100%);
+}
+
+.usth-logo-login__container {
+  display: flex;
+  align-items: center;
+  transform: translatey(0px);
+  animation: float 3s ease-in-out infinite;
+
+  img {
+    width: 500px;
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translatey(0px);
+  }
+  50% {
+    transform: translatey(-40px);
+  }
+  100% {
+    transform: translatey(0px);
+  }
+}
+
+.login-form__container {
+  display: flex;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-form__sub-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #ccc;
+  margin-right: 10%;
+}
+
+.login-form__header-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  span {
+    font-size: 1.6rem;
+  }
+}
+
+.login-form__email-container {
+  width: 300px;
+  margin-top: 20px;
+}
+
+.login-form__password-container {
+  margin-bottom: 20px;
+}
+
+.login-form__login-btn-container {
+  padding: 10% 0;
+  display: flex;
+  justify-content: center;
+}
+
+.login-form__remember-container {
+  display: flex;
+
+  .login-form__remember-text {
+    margin: 0;
+  }
+}

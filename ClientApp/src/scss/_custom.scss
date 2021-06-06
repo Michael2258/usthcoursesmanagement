@@ -1,0 +1,125 @@
+// Here you can add other styles
+$red: #f00;
+$white: #fff;
+
+* {
+  font-size: 0.9rem;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.loading-container {
+  min-width: 100vw;
+  min-height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999999999;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.app-alert {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding-top: 60px;
+  padding-right: 20px;
+  max-width: 500px;
+  z-index: 99998;
+}
+
+th {
+  vertical-align: top !important;
+}
+
+td {
+  vertical-align: middle !important;
+}
+
+.cursor-pointer {
+  cursor: pointer
+}
+
+.position-relative {
+  position: relative
+}
+
+.position-absolute {
+  position: absolute
+}
+
+.hover-opacity:hover {
+  opacity: 0.9
+}
+
+.text-sm {
+  font-size: 0.9em
+}
+
+.sidebar-logo {
+  max-width: 160px;
+  max-height: 40px;
+}
+
+.header-logo {
+  max-width: 300px;
+  max-height: 75px;
+}
+
+.pagination-dropdown {
+  min-width: 80px;
+}
+
+.pagination-input {
+  width: 50px;
+  border: 1px solid #dee2e6;
+}
+
+.add-btn {
+  height: 38px
+}
+
+.add-btn-text {
+  font-weight: 500
+}
+
+.detail-action-btn {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  background-color: #fff;
+  border-top: 1px solid #ddd;
+  margin-top: 20px;
+  margin-left: -30px;
+  padding: 8px
+}
+
+.error-handler {
+  font-size: 0.85rem
+}
+
+.detail-buttons-padding {
+  padding-bottom: 45px
+}
+
+.notification-icon {
+  font-size: 20px
+}
+
+.notification-count {
+  top: -4px;
+  right: -3px;
+  transform: translate(50%, -50%);
+  margin: 2px;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  background-color: $red;
+  color: $white;
+  text-align: center;
+}
