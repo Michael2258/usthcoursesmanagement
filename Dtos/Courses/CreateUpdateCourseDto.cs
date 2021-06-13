@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using coursesmanagement.Dtos.CourseDetails;
 
 namespace coursesmanagement.Dtos.Courses
 {
@@ -6,5 +7,6 @@ namespace coursesmanagement.Dtos.Courses
     {
         public string Name { get; set; }
         public int Semester { get; set; }
+        public CourseDetailUpdateDto CourseDetail { get; set; }
     }
 }
