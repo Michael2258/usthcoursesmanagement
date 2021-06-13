@@ -48,24 +48,31 @@ namespace coursesmanagement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "d51511ef-51e6-4fba-89bb-06cea735fc91",
-                            ConcurrencyStamp = "61d62fcb-1226-4af9-8104-2b30c23308c0",
+                            Id = "bbd703d2-e2ac-4135-a827-8d04f56ee46d",
+                            ConcurrencyStamp = "f3eb269b-5461-49e4-a1ba-4140aba375e0",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "79e60143-2eb6-40bf-99f5-384dfc9b49ee",
-                            ConcurrencyStamp = "c8b61189-aa81-48c2-97a2-77b3f9d4d258",
+                            Id = "943a2058-bea9-4bfe-9638-1913e29c1e63",
+                            ConcurrencyStamp = "2f1379a0-76a2-4a40-9c48-fbf43edbe3e9",
                             Name = "Teacher",
                             NormalizedName = "TEACHER"
                         },
                         new
                         {
-                            Id = "d89b5c46-43ce-4914-a153-aa51dfecb27d",
-                            ConcurrencyStamp = "8f2658fb-338b-42b0-ad5b-6d081bfb984d",
+                            Id = "206eb7bb-4fe3-4e54-b6e0-bfdb234e594c",
+                            ConcurrencyStamp = "6e6d4869-3a3b-4bb9-bf2f-de6ee61e7ff5",
                             Name = "Student",
                             NormalizedName = "STUDENT"
+                        },
+                        new
+                        {
+                            Id = "f1b1082d-ba21-4b21-86ba-3b75aef00685",
+                            ConcurrencyStamp = "e64f770e-397a-4dca-9093-c9be511a12ab",
+                            Name = "SuperAdmin",
+                            NormalizedName = "SUPERADMIN"
                         });
                 });
 
@@ -270,6 +277,29 @@ namespace coursesmanagement.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("coursesmanagement.Models.Attachment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CourseDetailId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Key")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseDetailId");
+
+                    b.ToTable("Attachments");
+                });
+
             modelBuilder.Entity("coursesmanagement.Models.Course", b =>
                 {
                     b.Property<int>("Id")
@@ -298,6 +328,39 @@ namespace coursesmanagement.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("coursesmanagement.Models.CourseDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId")
+                        .IsUnique();
+
+                    b.ToTable("CourseDetails");
                 });
 
             modelBuilder.Entity("coursesmanagement.Models.SchoolYear", b =>
@@ -390,6 +453,24 @@ namespace coursesmanagement.Migrations
                     b.HasOne("coursesmanagement.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("coursesmanagement.Models.Attachment", b =>
+                {
+                    b.HasOne("coursesmanagement.Models.CourseDetail", "CourseDetail")
+                        .WithMany("Attachments")
+                        .HasForeignKey("CourseDetailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("coursesmanagement.Models.CourseDetail", b =>
+                {
+                    b.HasOne("coursesmanagement.Models.Course", "Course")
+                        .WithOne("CourseDetail")
+                        .HasForeignKey("coursesmanagement.Models.CourseDetail", "CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

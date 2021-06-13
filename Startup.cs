@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Amazon.S3;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 using coursesmanagement.Data;
@@ -37,6 +38,7 @@ namespace coursesmanagement
         {
             services.AddControllersWithViews();
             services.ConfigureCourseServices();
+            services.AddAWSService<IAmazonS3>();
 
             services.AddCors(options =>
             {

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 using coursesmanagement.Dtos.Courses;
 using coursesmanagement.Dtos;
+using coursesmanagement.Dtos.CourseDetails;
 using coursesmanagement.Models;
 using coursesmanagement.Data;
 
@@ -78,7 +79,19 @@ namespace coursesmanagement.Services
                 {
                     Id = item.Id,
                     Name = item.Name,
-                    Semester = item.Semester
+                    Semester = item.Semester,
+                    CourseDetail = new CourseDetailDto
+                    {
+                        Id = item.CourseDetail.Id,
+                        CourseId = item.Id,
+                        Description = item.CourseDetail.Description,
+                        Attachments = item.CourseDetail.Attachments.Select(i => new AttachmentDto
+                        {
+                            Id = i.Id,
+                            Name = i.Name,
+                            Key = i.Key
+                        }).ToArray()
+                    }
                 })
                 .FirstOrDefaultAsync(q => q.Id == id);
 
@@ -100,7 +113,10 @@ namespace coursesmanagement.Services
             {
                 Name = model.Name,
                 Semester = model.Semester,
-
+                CourseDetail = new CourseDetail
+                {
+                    Description = model.CourseDetail.Description
+                }
             };
 
             await _context.Courses.AddAsync(newCourse);
@@ -116,14 +132,23 @@ namespace coursesmanagement.Services
 
         public async Task<CourseDto> Update(int id, CreateUpdateCourseDto model)
         {
-            var existingCourse = await _context.Courses.FirstOrDefaultAsync(i => i.Id == id);
+            var existingCourse = await _context.Courses
+                .Include(i => i.CourseDetail)
+                .FirstOrDefaultAsync(i => i.Id == id);
 
             if (existingCourse == default)
             {
                 throw new Exception("The course doesn't exist");
             }
 
-            model.Semester = existingCourse.Semester;
+            existingCourse.Semester = model.Semester;
+            existingCourse.CourseDetail.Description = model.CourseDetail.Description;
+            existingCourse.CourseDetail.Attachments = model.CourseDetail.Attachments.Select(i => new Attachment
+            {
+                Id = i.Id ?? default,
+                Name = i.Name,
+                Key = i.Key
+            }).ToArray();
 
             await _context.SaveChangesAsync();
 
@@ -131,7 +156,17 @@ namespace coursesmanagement.Services
             {
                 Id = existingCourse.Id,
                 Name = existingCourse.Name,
-                Semester = existingCourse.Semester
+                Semester = existingCourse.Semester,
+                CourseDetail = new CourseDetailDto
+                {
+                    Description = existingCourse.CourseDetail.Description,
+                    Attachments = existingCourse.CourseDetail.Attachments.Select(i => new AttachmentDto
+                    {
+                        Id = i.Id,
+                        Name = i.Name,
+                        Key = i.Key
+                    }).ToArray()
+                }
             };
         }
 

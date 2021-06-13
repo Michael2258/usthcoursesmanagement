@@ -198,6 +198,30 @@ namespace coursesmanagement.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CourseDetails",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeletedAt = table.Column<DateTime>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: false),
+                    CourseId = table.Column<int>(nullable: false),
+                    Description = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CourseDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CourseDetails_Courses_CourseId",
+                        column: x => x.CourseId,
+                        principalTable: "Courses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SchoolYearCourse",
                 columns: table => new
                 {
@@ -224,17 +248,13 @@ namespace coursesmanagement.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "367ae7c0-932b-44a7-81b6-9e7193bccfe3", "218f13c7-87f4-40cc-8983-ab50e670cb90", "Admin", "ADMIN" });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "4d34ad7e-a438-4cfa-b75e-abce3de18222", "cd7032f4-c15f-46e3-aa46-01698bbebd2b", "Teacher", "TEACHER" });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "523bc608-c151-4221-bd32-5914f8a22b0f", "6155677f-595a-4d85-a61b-bec894880b47", "Student", "STUDENT" });
+                values: new object[,]
+                {
+                    { "e8669635-a7e1-41b8-ab5a-39d5df25cf5f", "0a3ba4d5-1bce-408c-9c9c-476be98ba8c3", "Admin", "ADMIN" },
+                    { "1303f472-0799-4d22-ab7d-d2ec5663109f", "1746a31f-dfba-4a46-b401-b4cb14196487", "Teacher", "TEACHER" },
+                    { "a2ba65e6-d518-443f-b995-1641dfad7271", "6d73ff0a-c05f-4c0b-b8f6-191af15ef717", "Student", "STUDENT" },
+                    { "61c9d56c-eb7d-42ed-bf9a-bca944bb5536", "5d3fcbac-bdb5-4a6b-bd8f-77b5dcc5030e", "SuperAdmin", "SUPERADMIN" }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -276,6 +296,12 @@ namespace coursesmanagement.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CourseDetails_CourseId",
+                table: "CourseDetails",
+                column: "CourseId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SchoolYearCourse_CourseId",
                 table: "SchoolYearCourse",
                 column: "CourseId");
@@ -297,6 +323,9 @@ namespace coursesmanagement.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "CourseDetails");
 
             migrationBuilder.DropTable(
                 name: "SchoolYearCourse");

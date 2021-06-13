@@ -10,8 +10,8 @@ using coursesmanagement.Data;
 namespace coursesmanagement.Migrations
 {
     [DbContext(typeof(USTHCourseDbContext))]
-    [Migration("20210606033406_ThirdMigration")]
-    partial class ThirdMigration
+    [Migration("20210613080940_UpdateAttachmentToCourseDetail")]
+    partial class UpdateAttachmentToCourseDetail
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,24 +50,31 @@ namespace coursesmanagement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "38e1c044-bcc4-42ff-bba4-f5583c7a5377",
-                            ConcurrencyStamp = "95569409-2890-4226-a7e9-ab6ea0507f6d",
+                            Id = "bbd703d2-e2ac-4135-a827-8d04f56ee46d",
+                            ConcurrencyStamp = "f3eb269b-5461-49e4-a1ba-4140aba375e0",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "6f916250-e480-40f3-86ee-574e0d19e821",
-                            ConcurrencyStamp = "77bc497d-ccd3-48c5-b2f8-1547ff7f477a",
+                            Id = "943a2058-bea9-4bfe-9638-1913e29c1e63",
+                            ConcurrencyStamp = "2f1379a0-76a2-4a40-9c48-fbf43edbe3e9",
                             Name = "Teacher",
                             NormalizedName = "TEACHER"
                         },
                         new
                         {
-                            Id = "b38ad656-ffab-44a0-8bab-1927f62d3560",
-                            ConcurrencyStamp = "cdd6bc8f-bf2a-4332-a780-5c0df918a8a0",
+                            Id = "206eb7bb-4fe3-4e54-b6e0-bfdb234e594c",
+                            ConcurrencyStamp = "6e6d4869-3a3b-4bb9-bf2f-de6ee61e7ff5",
                             Name = "Student",
                             NormalizedName = "STUDENT"
+                        },
+                        new
+                        {
+                            Id = "f1b1082d-ba21-4b21-86ba-3b75aef00685",
+                            ConcurrencyStamp = "e64f770e-397a-4dca-9093-c9be511a12ab",
+                            Name = "SuperAdmin",
+                            NormalizedName = "SUPERADMIN"
                         });
                 });
 
@@ -272,6 +279,29 @@ namespace coursesmanagement.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("coursesmanagement.Models.Attachment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CourseDetailId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Key")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseDetailId");
+
+                    b.ToTable("Attachments");
+                });
+
             modelBuilder.Entity("coursesmanagement.Models.Course", b =>
                 {
                     b.Property<int>("Id")
@@ -300,6 +330,39 @@ namespace coursesmanagement.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("coursesmanagement.Models.CourseDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId")
+                        .IsUnique();
+
+                    b.ToTable("CourseDetails");
                 });
 
             modelBuilder.Entity("coursesmanagement.Models.SchoolYear", b =>
@@ -396,10 +459,28 @@ namespace coursesmanagement.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("coursesmanagement.Models.Attachment", b =>
+                {
+                    b.HasOne("coursesmanagement.Models.CourseDetail", "CourseDetail")
+                        .WithMany("Attachments")
+                        .HasForeignKey("CourseDetailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("coursesmanagement.Models.CourseDetail", b =>
+                {
+                    b.HasOne("coursesmanagement.Models.Course", "Course")
+                        .WithOne("CourseDetail")
+                        .HasForeignKey("coursesmanagement.Models.CourseDetail", "CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("coursesmanagement.Models.SchoolYearCourse", b =>
                 {
                     b.HasOne("coursesmanagement.Models.Course", "Course")
-                        .WithMany("SchoolYearCourses")
+                        .WithMany()
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

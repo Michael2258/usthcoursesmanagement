@@ -6,5 +6,6 @@ namespace coursesmanagement.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public int Semester { get; set; }
+        public virtual CourseDetail CourseDetail { get; set; }
     }
 }
