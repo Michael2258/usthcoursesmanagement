@@ -1,7 +1,15 @@
 import UserControlPage from "../containers/User/views/UserControlPage"
-import FileForm from "../containers/Files/views/FileForm"
+import Home from "../containers/Home/views/Home"
+import CourseList from "../containers/Courses/views/CourseList"
+import CourseDetail from "../containers/Courses/components/CourseDetail"
 
 export const adminRoutes = [
+  {
+    path: "/",
+    component: Home,
+    exact: true,
+    roles: ["Admin"],
+  },
   {
     path: "/user",
     component: UserControlPage,
@@ -9,8 +17,20 @@ export const adminRoutes = [
     roles: ["Admin"],
   },
   {
-    path: "/uploadfiles",
-    component: FileForm,
+    path: "/course",
+    component: CourseList,
+    exact: true,
+    roles: ["Admin"],
+  },
+  {
+    path: "/course/:id",
+    component: CourseDetail,
+    exact: true,
+    roles: ["Admin"],
+  },
+  {
+    path: "/createcourse",
+    component: CourseDetail,
     exact: true,
     roles: ["Admin"],
   },

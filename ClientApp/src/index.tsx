@@ -1,4 +1,6 @@
 import "bootstrap/dist/css/bootstrap.css"
+import "font-awesome/css/font-awesome.min.css"
+import "css-file-icons/build/css-file-icons.css"
 
 import * as React from "react"
 import * as ReactDOM from "react-dom"

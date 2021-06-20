@@ -19,6 +19,7 @@ namespace coursesmanagement.Services
         Task<CourseDto> Create(CreateUpdateCourseDto model);
         Task<CourseDto> Update(int id, CreateUpdateCourseDto model);
         Task Remove(int id);
+        Task RemoveAttachedFile(int attachedId);
     }
 
     public class CourseService : ICourseService
@@ -73,6 +74,7 @@ namespace coursesmanagement.Services
 
         public async Task<CourseDto> GetById(int id)
         {
+
             CourseDto item = await _context.Courses
                 .AsNoTracking()
                 .Select(item => new CourseDto
@@ -89,11 +91,17 @@ namespace coursesmanagement.Services
                         {
                             Id = i.Id,
                             Name = i.Name,
-                            Key = i.Key
+                            Key = i.Key,
+                            UploadedFileType = (int)i.UploadedFileType
                         }).ToArray()
                     }
                 })
                 .FirstOrDefaultAsync(q => q.Id == id);
+
+            if (item == default)
+            {
+                throw new Exception($"Course with id {id} does not exist");
+            }
 
             return item;
         }
@@ -132,13 +140,25 @@ namespace coursesmanagement.Services
 
         public async Task<CourseDto> Update(int id, CreateUpdateCourseDto model)
         {
-            var existingCourse = await _context.Courses
+            List<Course> courses = await _context.Courses
                 .Include(i => i.CourseDetail)
-                .FirstOrDefaultAsync(i => i.Id == id);
+                .ToListAsync();
+
+            Course existingCourse = courses.FirstOrDefault(i => i.Id == id);
 
             if (existingCourse == default)
             {
-                throw new Exception("The course doesn't exist");
+                throw new Exception("The course does not exist");
+            }
+
+            foreach (var course in courses)
+            {
+                bool hasDuplicateAttachedFile = model.CourseDetail.Attachments.Any(i => i.Name.Trim().ToUpper() == course.Name.Trim().ToUpper());
+
+                if (hasDuplicateAttachedFile)
+                {
+                    throw new Exception("Duplicate attached file name");
+                }
             }
 
             existingCourse.Semester = model.Semester;
@@ -147,7 +167,8 @@ namespace coursesmanagement.Services
             {
                 Id = i.Id ?? default,
                 Name = i.Name,
-                Key = i.Key
+                Key = i.Key,
+                UploadedFileType = (UploadedFileType)i.UploadedFileType
             }).ToArray();
 
             await _context.SaveChangesAsync();
@@ -164,23 +185,42 @@ namespace coursesmanagement.Services
                     {
                         Id = i.Id,
                         Name = i.Name,
-                        Key = i.Key
+                        Key = i.Key,
+                        UploadedFileType = (int)i.UploadedFileType
                     }).ToArray()
                 }
             };
         }
 
+        // remove course
         public async Task Remove(int id)
         {
             var existingCourse = await _context.Courses.FirstOrDefaultAsync(i => i.Id == id);
 
             if (existingCourse == default)
             {
-                throw new Exception("The course doesn's exist.");
+                throw new Exception("The course does not exist.");
             }
 
             _context.Courses.Remove(existingCourse);
             await _context.SaveChangesAsync();
+        }
+
+        // remove attached file
+        public async Task RemoveAttachedFile(int attachedId)
+        {
+            Attachment existingAttachedFile = await _context.Attachments
+                .FirstOrDefaultAsync(i => i.Id == attachedId);
+
+            if (existingAttachedFile == default)
+            {
+                throw new Exception("File does not exist");
+            }
+
+            _context.Remove(existingAttachedFile);
+            await _context.SaveChangesAsync();
+
+
         }
     }
 }

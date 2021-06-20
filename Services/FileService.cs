@@ -79,6 +79,8 @@ namespace coursesmanagement.Services
                 await stream.CopyToAsync(memory);
             }
 
+            memory.Position = 0;
+
             return new FileDto.DownloadObject
             {
                 Memory = memory,

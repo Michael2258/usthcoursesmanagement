@@ -1,0 +1,166 @@
+// Course list
+.course-list__title {
+  p {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #273896;
+    padding: 20px;
+    width: 100%;
+  }
+}
+
+.course-list__additional {
+  display: flex;
+  align-items: center;
+  padding-bottom: 30px;
+
+  .course-list__add-course-btn {
+    background-color: #add8e6;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid #add8e6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #01d;
+
+    &:hover {
+      background-color: #273896;
+      border: 1px solid #273896;
+      color: #fff;
+    }
+
+    span {
+      font-size: 1.4rem;
+    }
+  }
+
+  .course-list__search-bar {
+    font-size: 1.2rem;
+    color: #000;
+    background-color: #fff;
+    padding: 10px 20px;
+
+    &:focus {
+      border: 1px solid #273896;
+      outline: none;
+    }
+  }
+}
+
+// Course detail
+.course-detail__label {
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.course-detail__header {
+  width: 100%;
+  p {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #273896;
+    padding: 20px;
+    width: 100%;
+  }
+}
+
+.course-detail__submit-btn {
+  background-color: #add8e6;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid #add8e6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #01d;
+
+  &:hover {
+    background-color: #273896;
+    border: 1px solid #273896;
+    color: #fff;
+  }
+}
+
+.course-detail__cancel-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    background-color: #ccc;
+    border: 1px solid #ccc;
+  }
+}
+
+.course-detail__upload-btn {
+  margin: 10px 0;
+}
+
+// attachment
+.course-detail__attached-files-container {
+  width: 100%;
+}
+
+.attachment-file__wrapper {
+  display: flex;
+  padding: 8px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  width: 180px;
+  height: 120px;
+  cursor: pointer;
+
+  .attachment-file__info {
+    display: flex;
+    flex-direction: column;
+    flex: 2;
+    justify-content: space-between;
+
+    .attachment-file__info-img {
+      padding-left: 10px;
+      padding-top: 10px;
+    }
+
+    .attachment-file__info-name {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      width: 100px;
+    }
+  }
+
+  .attachment-file__actions-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: space-between;
+
+    .attachment-file__action-remove {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      i {
+        font-size: 1.4rem;
+      }
+    }
+
+    .attachment-file__action-download {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      i {
+        font-size: 1.4rem;
+      }
+    }
+  }
+}

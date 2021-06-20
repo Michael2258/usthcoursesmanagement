@@ -1,4 +1,5 @@
 import React from "react"
+import { NavLink, useHistory } from "react-router-dom"
 import { Col, Row } from "reactstrap"
 import headercomponent from "../scss/headercomponent.module.scss"
 import TheHeaderDropdown from "./TheHeaderDropdown"
@@ -31,7 +32,7 @@ function HeaderComponent() {
                 xs="2"
               >
                 <li>
-                  <a href="">Home</a>
+                  <a href="/admin">Home</a>
                 </li>
               </Col>
               <Col
@@ -47,7 +48,7 @@ function HeaderComponent() {
                 xs="2"
               >
                 <li>
-                  <a href="">Courses</a>
+                  <a href="/admin/user">User</a>
                 </li>
               </Col>
               <Col
@@ -55,7 +56,7 @@ function HeaderComponent() {
                 xs="2"
               >
                 <li>
-                  <a href="">Moodle</a>
+                  <a href="/admin/course">Course</a>
                 </li>
               </Col>
               <Col
