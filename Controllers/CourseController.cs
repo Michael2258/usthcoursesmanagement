@@ -75,13 +75,28 @@ namespace coursesmanagement.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("remove-course/{id}")]
         [Authorize]
-        public async Task<object> Remove(int id)
+        public async Task<object> Remove([FromRoute] int id)
         {
             try
             {
                 await _courseService.Remove(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("remove-attached-file/{attachedId}")]
+        [Authorize]
+        public async Task<object> RemoveAttachedFile([FromRoute] int attachedId)
+        {
+            try
+            {
+                await _courseService.RemoveAttachedFile(attachedId);
                 return Ok();
             }
             catch (Exception ex)

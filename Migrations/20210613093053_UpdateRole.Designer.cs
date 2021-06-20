@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using coursesmanagement.Data;
 
 namespace coursesmanagement.Migrations
 {
     [DbContext(typeof(USTHCourseDbContext))]
-    partial class USTHCourseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210613093053_UpdateRole")]
+    partial class UpdateRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,8 +66,8 @@ namespace coursesmanagement.Migrations
                         {
                             Id = "676d0f1d-818b-469c-af2b-494322d96c76",
                             ConcurrencyStamp = "53d597ef-3e8d-411d-9edd-8d6246822cdf",
-                            Name = "SuperAdmin",
-                            NormalizedName = "SUPERADMIN"
+                            Name = "Assistant",
+                            NormalizedName = "ASSISTANT"
                         },
                         new
                         {
@@ -73,6 +75,13 @@ namespace coursesmanagement.Migrations
                             ConcurrencyStamp = "5af323d5-3685-414e-936e-00d63cb8ba62",
                             Name = "Student",
                             NormalizedName = "STUDENT"
+                        },
+                        new
+                        {
+                            Id = "fde5b84c-ab5b-4b05-b2bc-6a15062da176",
+                            ConcurrencyStamp = "c1495958-840b-4659-86cb-d9085c5010ea",
+                            Name = "Parent",
+                            NormalizedName = "PARENT"
                         });
                 });
 
@@ -292,9 +301,6 @@ namespace coursesmanagement.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UploadedFileType")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

@@ -46,6 +46,13 @@ namespace coursesmanagement.Services
         {
             var role = "SuperAdmin";
 
+            var roleExist = await _roleManager.RoleExistsAsync(role);
+
+            if (!roleExist)
+            {
+                throw new Exception($"Role {role} doesn't exist");
+            }
+
             var user = new ApplicationUser
             {
                 UserName = model.UserName,
@@ -115,7 +122,7 @@ namespace coursesmanagement.Services
         public async Task<LoginResponseDto> Login(LoginDto model)
         {
 
-            ApplicationUser applicationUser = _userManager.Users.SingleOrDefault(r => r.UserName == model.Email || r.Email == model.Email);
+            ApplicationUser applicationUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
 
             if (applicationUser == null)
             {

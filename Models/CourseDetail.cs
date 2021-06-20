@@ -17,7 +17,14 @@ namespace coursesmanagement.Models
         public int Id { get; set; }
         public string Key { get; set; }
         public string Name { get; set; }
+        public UploadedFileType UploadedFileType { get; set; }
         public int CourseDetailId { get; set; }
         public virtual CourseDetail CourseDetail { get; set; }
+    }
+
+    public enum UploadedFileType
+    {
+        Slide,
+        Coursebook
     }
 }

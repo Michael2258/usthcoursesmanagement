@@ -28,7 +28,7 @@ const useLogin = () => {
 
   useEffect(() => {
     const token = getAccessToken()
-    if (!!token) history.push("/admin/user")
+    if (!!token) history.push("/")
   }, [])
 
   const userLogin = useCallback(async () => {
@@ -36,11 +36,18 @@ const useLogin = () => {
 
     try {
       const res = await logIn(data)
-      const { token, email, firstName, lastName } = res.data
+      const { token, email, firstName, lastName, roles } = res.data
 
       dispatch(setUser({ email, firstName, lastName }))
       localStorage.setItem(ACCESS_TOKEN, token)
-      history.push("/admin/user")
+
+      if (roles.includes("Admin") || roles.includes("SuperAdmin")) {
+        history.push("/admin")
+      } else if (roles.includes("Teacher")) {
+        history.push("/teacher")
+      } else if (roles.includes("Student")) {
+        history.push("/student")
+      }
     } catch (err) {
       dispatch(
         setAlert({
@@ -48,10 +55,11 @@ const useLogin = () => {
           message: err.response?.data || err.message,
         })
       )
+      localStorage.removeItem(ACCESS_TOKEN)
     }
 
     dispatch(setLoading(false))
-  }, [dispatch, history, data])
+  }, [])
 
   return { data, changeData, userLogin }
 }

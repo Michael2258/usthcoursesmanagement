@@ -55,6 +55,7 @@ namespace coursesmanagement.Controllers
 
         /// <summary>Download file to local</summary>
         [HttpGet]
+        [Route("download")]
         public async Task<IActionResult> DownloadFile([FromQuery] string key)
         {
             FileDto.DownloadObject downloader = await _fileService.DownloadFile(key);
