@@ -7,6 +7,6 @@ namespace coursesmanagement.Models
         public int Id { get; set; }
         [Required]
         public string Year { get; set; }
-        public virtual ICollection<SchoolYearCourse> SchoolYearCourses { get; set; }
+        public virtual ICollection<Course> Courses { get; set; }
     }
 }

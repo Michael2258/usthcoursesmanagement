@@ -13,6 +13,8 @@ namespace coursesmanagement.Locators
             services.AddScoped<ISchoolYearService, SchoolYearService>();
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<IFileService, FileService>();
+            services.AddScoped<ITeacherService, TeacherService>();
+            services.AddScoped<IStudentService, StudentService>();
         }
     }
 

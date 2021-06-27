@@ -1,4 +1,6 @@
+using System.Threading;
 using coursesmanagement.Dtos.CourseDetails;
+using coursesmanagement.Dtos.Teacher;
 
 namespace coursesmanagement.Dtos.Courses
 {
@@ -7,6 +9,8 @@ namespace coursesmanagement.Dtos.Courses
         public int Id { get; set; }
         public string Name { get; set; }
         public int Semester { get; set; }
+        public string SchoolYear { get; set; }
+        public TeacherDto Teacher { get; set; }
         public CourseDetailDto CourseDetail { get; set; }
     }
 }

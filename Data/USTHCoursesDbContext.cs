@@ -19,9 +19,10 @@ namespace coursesmanagement.Data
 
         public DbSet<SchoolYear> SchoolYears { get; set; }
         public DbSet<Course> Courses { get; set; }
-        // public DbSet<FileModel> Files { get; set; }
         public DbSet<CourseDetail> CourseDetails { get; set; }
         public DbSet<Attachment> Attachments { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<Student> Students { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -55,8 +56,15 @@ namespace coursesmanagement.Data
                     },
                 });
 
-            builder.Entity<SchoolYearCourse>()
-            .HasKey(t => new { t.SchoolYearId, t.CourseId });
+            builder.Entity<Course>()
+                .HasOne(i => i.SchoolYear)
+                .WithMany(i => i.Courses)
+                .HasForeignKey(i => i.SchoolYearId);
+
+            builder.Entity<Course>()
+                .HasOne(i => i.Teacher)
+                .WithMany(i => i.Courses)
+                .HasForeignKey(i => i.TeacherId);
 
             builder.Entity<CourseDetail>()
                 .HasOne(i => i.Course)
@@ -67,6 +75,16 @@ namespace coursesmanagement.Data
                 .HasOne(i => i.CourseDetail)
                 .WithMany(i => i.Attachments)
                 .HasForeignKey(i => i.CourseDetailId);
+
+            builder.Entity<Teacher>()
+                .HasOne(i => i.User)
+                .WithOne()
+                .HasForeignKey<Teacher>(i => i.UserId);
+
+            builder.Entity<Student>()
+                .HasOne(i => i.User)
+                .WithOne()
+                .HasForeignKey<Student>(i => i.UserId);
         }
 
         public static void RegisterCoreModels(ModelBuilder builder)

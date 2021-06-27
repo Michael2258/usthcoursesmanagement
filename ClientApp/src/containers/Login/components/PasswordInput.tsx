@@ -8,7 +8,7 @@ const PasswordInput = (props: any) => {
     handleBlur,
     isPasswordShown,
     togglePasswordVisible,
-    changeData,
+    onChange,
   } = props
 
   const eyeIconStyle: CSSProperties = {
@@ -23,7 +23,7 @@ const PasswordInput = (props: any) => {
         name="password"
         placeholder="Password"
         value={values.password}
-        onChange={(e: any) => changeData({ password: e.target.value })}
+        onChange={onChange}
         onBlur={handleBlur("password")}
         required
       />

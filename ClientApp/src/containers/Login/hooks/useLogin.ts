@@ -7,31 +7,36 @@ import { setLoading, setUser, setAlert } from "../../../redux/commons/action"
 import { ACCESS_TOKEN } from "../../../utils/constants"
 import getAccessToken from "../../../utils/getAccessToken"
 
-const initData = {
-  email: "usth2021@gmail.com",
-  password: "Asdfgh1@3",
+type LoginInfo = {
+  email: string
+  password: string
+}
+
+const initData: LoginInfo = {
+  email: "",
+  password: "",
 }
 
 const useLogin = () => {
   const history = useHistory()
   const dispatch = useDispatch()
-  const [data, setData] = useState(initData)
-  const changeData = useCallback(
-    (valueObject) => {
-      setData({
-        ...data,
-        ...valueObject,
-      })
-    },
-    [data]
-  )
+  // const [data, setData] = useState(initData)
+  // const changeData = useCallback(
+  //   (valueObject) => {
+  //     setData({
+  //       ...data,
+  //       ...valueObject,
+  //     })
+  //   },
+  //   [data]
+  // )
 
   useEffect(() => {
     const token = getAccessToken()
     if (!!token) history.push("/")
   }, [])
 
-  const userLogin = useCallback(async () => {
+  const userLogin = useCallback(async (data: any) => {
     dispatch(setLoading(true))
 
     try {
@@ -61,7 +66,7 @@ const useLogin = () => {
     dispatch(setLoading(false))
   }, [])
 
-  return { data, changeData, userLogin }
+  return { initData, userLogin }
 }
 
 export default useLogin

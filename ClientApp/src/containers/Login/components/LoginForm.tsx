@@ -17,24 +17,31 @@ const validationSchema = yup.object({
 const LoginForm: FC<Props> = () => {
   // const togglePasswordVisible = () => setIsPasswordShown(!isPasswordShown)
 
-  const { data, changeData, userLogin } = useLogin()
+  const { initData, userLogin } = useLogin()
 
   return (
     <Formik
-      initialValues={data}
+      initialValues={initData}
       enableReinitialize
       validationSchema={validationSchema}
-      onSubmit={async () => {
+      onSubmit={async (values) => {
         try {
-          userLogin()
+          userLogin(values)
         } catch (err) {
           console.error(err)
         }
       }}
     >
       {(formikProps) => {
-        const { handleBlur, handleSubmit, values, touched, errors } =
-          formikProps
+        const {
+          handleBlur,
+          handleSubmit,
+          handleChange,
+          setFieldValue,
+          values,
+          touched,
+          errors,
+        } = formikProps
 
         const emailError = touched.email && errors.email
         const passwordError = touched.password && errors.password
@@ -59,7 +66,7 @@ const LoginForm: FC<Props> = () => {
                   name="email"
                   placeholder="Email"
                   value={values.email}
-                  onChange={(e: any) => changeData({ email: e.target.value })}
+                  onChange={handleChange}
                   onBlur={handleBlur("email")}
                   required
                 />
@@ -75,7 +82,9 @@ const LoginForm: FC<Props> = () => {
                   // togglePasswordVisible={togglePasswordVisible}
                   values={values}
                   handleBlur={handleBlur}
-                  changeData={changeData}
+                  onChange={(e: any) =>
+                    setFieldValue("password", e.target.value)
+                  }
                 />
                 {passwordError && (
                   <ErrorHandler text={errors.password as string} />

@@ -25,7 +25,7 @@ const TheHeaderDropdown = () => {
   const signOut = useCallback(() => {
     localStorage.removeItem(ACCESS_TOKEN)
     dispatch(setUser(null))
-    history.push("/login")
+    history.replace("/login")
   }, [])
 
   const avatarUrl = DEFAULT_USER_AVATAR
