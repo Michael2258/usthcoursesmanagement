@@ -9,6 +9,7 @@ using coursesmanagement.Dtos;
 using coursesmanagement.Dtos.CourseDetails;
 using coursesmanagement.Models;
 using coursesmanagement.Data;
+using coursesmanagement.Dtos.Teacher;
 
 namespace coursesmanagement.Services
 {
@@ -57,7 +58,18 @@ namespace coursesmanagement.Services
             {
                 Id = i.Id,
                 Name = i.Name,
-                Semester = i.Semester
+                Semester = i.Semester,
+                SchoolYear = i.SchoolYear.Year,
+                Teacher = new TeacherDto
+                {
+                    Id = i.Teacher.Id,
+                    UserName = i.Teacher.User.UserName,
+                    FirstName = i.Teacher.User.FirstName,
+                    LastName = i.Teacher.User.LastName,
+                    Email = i.Teacher.User.Email,
+                    Gender = i.Teacher.User.Gender,
+                    Avatar = i.Teacher.User.Avatar
+                }
             }).ToListAsync();
 
             PagedResponseDto<CourseDto> result = new PagedResponseDto<CourseDto>
@@ -74,7 +86,6 @@ namespace coursesmanagement.Services
 
         public async Task<CourseDto> GetById(int id)
         {
-
             CourseDto item = await _context.Courses
                 .AsNoTracking()
                 .Select(item => new CourseDto
@@ -82,6 +93,7 @@ namespace coursesmanagement.Services
                     Id = item.Id,
                     Name = item.Name,
                     Semester = item.Semester,
+                    SchoolYear = item.SchoolYear.Year,
                     CourseDetail = new CourseDetailDto
                     {
                         Id = item.CourseDetail.Id,
@@ -94,6 +106,16 @@ namespace coursesmanagement.Services
                             Key = i.Key,
                             UploadedFileType = (int)i.UploadedFileType
                         }).ToArray()
+                    },
+                    Teacher = new TeacherDto
+                    {
+                        Id = item.Teacher.Id,
+                        FirstName = item.Teacher.User.FirstName,
+                        LastName = item.Teacher.User.LastName,
+                        UserName = item.Teacher.User.UserName,
+                        Email = item.Teacher.User.Email,
+                        Gender = item.Teacher.User.Gender,
+                        Avatar = item.Teacher.User.Avatar
                     }
                 })
                 .FirstOrDefaultAsync(q => q.Id == id);
@@ -108,23 +130,42 @@ namespace coursesmanagement.Services
 
         public async Task<CourseDto> Create(CreateUpdateCourseDto model)
         {
-            var exist = await _context.Courses
-                .AsNoTracking()
-                .AnyAsync(i => i.Name.Equals(model.Name));
+            SchoolYear schoolYear = await _context.SchoolYears
+                .Include(i => i.Courses)
+                .FirstOrDefaultAsync(i => i.Year == model.SchoolYear);
 
-            if (exist)
+            // check if school year exists
+            if (schoolYear == default)
+            {
+                throw new Exception($"School year {schoolYear.Year} does not exist");
+            }
+
+
+            // one school year cannot has duplicate course
+            bool existCourseInSchoolYear = schoolYear.Courses.Any(i => i.Name.Equals(model.Name));
+
+
+            if (existCourseInSchoolYear)
             {
                 throw new Exception("Course already exists.");
             }
+
+            Teacher teacher = await _context.Teachers
+                .Include(i => i.User)
+                .Where(i => i.Id == model.TeacherId)
+                .FirstOrDefaultAsync();
 
             Course newCourse = new Course
             {
                 Name = model.Name,
                 Semester = model.Semester,
+                SchoolYearId = schoolYear.Id,
+                SchoolYear = schoolYear,
                 CourseDetail = new CourseDetail
                 {
                     Description = model.CourseDetail.Description
-                }
+                },
+                Teacher = teacher
             };
 
             await _context.Courses.AddAsync(newCourse);
@@ -134,7 +175,14 @@ namespace coursesmanagement.Services
             {
                 Id = newCourse.Id,
                 Name = newCourse.Name,
-                Semester = newCourse.Semester
+                Semester = newCourse.Semester,
+                Teacher = new TeacherDto
+                {
+                    Id = teacher.Id,
+                    FirstName = teacher.User.FirstName,
+                    LastName = teacher.User.LastName,
+                    Email = teacher.User.Email
+                }
             };
         }
 
@@ -142,8 +190,10 @@ namespace coursesmanagement.Services
         {
             List<Course> courses = await _context.Courses
                 .Include(i => i.CourseDetail)
+                .Include(i => i.SchoolYear)
                 .ToListAsync();
 
+            // fix the logic of checking existing name course
             Course existingCourse = courses.FirstOrDefault(i => i.Id == id);
 
             if (existingCourse == default)
@@ -153,6 +203,8 @@ namespace coursesmanagement.Services
 
             foreach (var course in courses)
             {
+                // wrong logic
+                // should compare between all the attachment, not attachment name with course name
                 bool hasDuplicateAttachedFile = model.CourseDetail.Attachments.Any(i => i.Name.Trim().ToUpper() == course.Name.Trim().ToUpper());
 
                 if (hasDuplicateAttachedFile)
@@ -161,7 +213,11 @@ namespace coursesmanagement.Services
                 }
             }
 
+            Teacher newTeacher = await _context.Teachers.Include(i => i.User).FirstOrDefaultAsync(i => i.Id == model.TeacherId);
+
             existingCourse.Semester = model.Semester;
+            existingCourse.SchoolYear.Year = model.SchoolYear;
+            existingCourse.Teacher = newTeacher;
             existingCourse.CourseDetail.Description = model.CourseDetail.Description;
             existingCourse.CourseDetail.Attachments = model.CourseDetail.Attachments.Select(i => new Attachment
             {
@@ -178,6 +234,13 @@ namespace coursesmanagement.Services
                 Id = existingCourse.Id,
                 Name = existingCourse.Name,
                 Semester = existingCourse.Semester,
+                Teacher = new TeacherDto
+                {
+                    FirstName = newTeacher.User.FirstName,
+                    LastName = newTeacher.User.LastName,
+                    Email = newTeacher.User.Email,
+                    Gender = newTeacher.User.Gender
+                },
                 CourseDetail = new CourseDetailDto
                 {
                     Description = existingCourse.CourseDetail.Description,

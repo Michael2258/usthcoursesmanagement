@@ -10,8 +10,8 @@ using coursesmanagement.Data;
 namespace coursesmanagement.Migrations
 {
     [DbContext(typeof(USTHCourseDbContext))]
-    [Migration("20210619043627_UpdateAttachmentStructure")]
-    partial class UpdateAttachmentStructure
+    [Migration("20210625092327_AddFirstMigration")]
+    partial class AddFirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -324,13 +324,23 @@ namespace coursesmanagement.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("SchoolYearId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Semester")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TeacherId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SchoolYearId");
+
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("Courses");
                 });
@@ -396,19 +406,66 @@ namespace coursesmanagement.Migrations
                     b.ToTable("SchoolYears");
                 });
 
-            modelBuilder.Entity("coursesmanagement.Models.SchoolYearCourse", b =>
+            modelBuilder.Entity("coursesmanagement.Models.Student", b =>
                 {
-                    b.Property<int>("SchoolYearId")
-                        .HasColumnType("int");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
-                    b.HasKey("SchoolYearId", "CourseId");
+                    b.Property<DateTime>("DeletedAt")
+                        .HasColumnType("datetime2");
 
-                    b.HasIndex("CourseId");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
-                    b.ToTable("SchoolYearCourse");
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
+
+                    b.ToTable("Students");
+                });
+
+            modelBuilder.Entity("coursesmanagement.Models.Teacher", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Teachers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -471,6 +528,21 @@ namespace coursesmanagement.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("coursesmanagement.Models.Course", b =>
+                {
+                    b.HasOne("coursesmanagement.Models.SchoolYear", "SchoolYear")
+                        .WithMany("Courses")
+                        .HasForeignKey("SchoolYearId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("coursesmanagement.Models.Teacher", "Teacher")
+                        .WithMany("Courses")
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("coursesmanagement.Models.CourseDetail", b =>
                 {
                     b.HasOne("coursesmanagement.Models.Course", "Course")
@@ -480,17 +552,18 @@ namespace coursesmanagement.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("coursesmanagement.Models.SchoolYearCourse", b =>
+            modelBuilder.Entity("coursesmanagement.Models.Student", b =>
                 {
-                    b.HasOne("coursesmanagement.Models.Course", "Course")
-                        .WithMany()
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("coursesmanagement.Models.ApplicationUser", "User")
+                        .WithOne()
+                        .HasForeignKey("coursesmanagement.Models.Student", "UserId");
+                });
 
-                    b.HasOne("coursesmanagement.Models.SchoolYear", "SchoolYear")
-                        .WithMany("SchoolYearCourses")
-                        .HasForeignKey("SchoolYearId")
+            modelBuilder.Entity("coursesmanagement.Models.Teacher", b =>
+                {
+                    b.HasOne("coursesmanagement.Models.ApplicationUser", "User")
+                        .WithOne()
+                        .HasForeignKey("coursesmanagement.Models.Teacher", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

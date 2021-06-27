@@ -55,12 +55,12 @@ namespace coursesmanagement.Services
             {
                 Id = schoolYear.Id,
                 Year = schoolYear.Year,
-                NumberOfCourses = schoolYear.SchoolYearCourses.Count,
-                Courses = schoolYear.SchoolYearCourses.Select(i => new CourseDto
+                NumberOfCourses = schoolYear.Courses.Count,
+                Courses = schoolYear.Courses.Select(i => new CourseDto
                 {
-                    Id = i.Course.Id,
-                    Name = i.Course.Name,
-                    Semester = i.Course.Semester
+                    Id = i.Id,
+                    Name = i.Name,
+                    Semester = i.Semester
                 })
             }).ToListAsync();
 
@@ -82,11 +82,11 @@ namespace coursesmanagement.Services
             {
                 Id = item.Id,
                 Year = item.Year,
-                Courses = item.SchoolYearCourses.Select(course => new CourseDto()
+                Courses = item.Courses.Select(course => new CourseDto()
                 {
-                    Id = course.Course.Id,
-                    Name = course.Course.Name,
-                    Semester = course.Course.Semester
+                    Id = course.Id,
+                    Name = course.Name,
+                    Semester = course.Semester
                 })
             }).FirstOrDefaultAsync(q => q.Id == id);
 
@@ -104,11 +104,7 @@ namespace coursesmanagement.Services
 
             SchoolYear newSchoolYear = new SchoolYear
             {
-                Year = model.Year,
-                SchoolYearCourses = model.CourseIds.Select(id => new SchoolYearCourse
-                {
-                    CourseId = id
-                }).ToList()
+                Year = model.Year
             };
 
             await _context.SchoolYears.AddAsync(newSchoolYear);
@@ -118,16 +114,16 @@ namespace coursesmanagement.Services
             {
                 Id = newSchoolYear.Id,
                 Year = newSchoolYear.Year,
-                Courses = newSchoolYear.SchoolYearCourses.Select(course => new CourseDto
-                {
-                    Id = course.CourseId
-                })
+                // Courses = newSchoolYear.SchoolYearCourses.Select(course => new CourseDto
+                // {
+                //     Id = course.CourseId
+                // })
             };
         }
 
         public async Task<SchoolYearDto> Update(int id, CreateUpdateSchoolYearDto model)
         {
-            var existingSchoolYear = await _context.SchoolYears.Include(i => i.SchoolYearCourses).FirstOrDefaultAsync(q => q.Id == id);
+            var existingSchoolYear = await _context.SchoolYears.FirstOrDefaultAsync(q => q.Id == id);
 
             if (existingSchoolYear == default)
             {
@@ -135,10 +131,10 @@ namespace coursesmanagement.Services
             }
 
             existingSchoolYear.Year = model.Year;
-            existingSchoolYear.SchoolYearCourses = model.CourseIds.Select(i => new SchoolYearCourse
-            {
-                CourseId = i
-            }).ToList();
+            // existingSchoolYear.SchoolYearCourses = model.CourseIds.Select(i => new SchoolYearCourse
+            // {
+            //     CourseId = i
+            // }).ToList();
 
             await _context.SaveChangesAsync();
 
@@ -146,9 +142,11 @@ namespace coursesmanagement.Services
             {
                 Id = existingSchoolYear.Id,
                 Year = existingSchoolYear.Year,
-                Courses = existingSchoolYear.SchoolYearCourses.Select(i => new CourseDto()
+                Courses = existingSchoolYear.Courses.Select(i => new CourseDto()
                 {
-                    Id = i.CourseId
+                    Id = i.Id,
+                    Name = i.Name,
+                    Semester = i.Semester
                 })
             };
         }

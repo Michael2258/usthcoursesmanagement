@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace coursesmanagement.Migrations
 {
-    public partial class FirstMigration : Migration
+    public partial class AddFirstMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -54,24 +54,6 @@ namespace coursesmanagement.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Courses",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeletedAt = table.Column<DateTime>(nullable: false),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    UpdatedAt = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    Semester = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Courses", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -198,6 +180,84 @@ namespace coursesmanagement.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Students",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeletedAt = table.Column<DateTime>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Students", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Students_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Teachers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeletedAt = table.Column<DateTime>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Teachers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Teachers_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Courses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeletedAt = table.Column<DateTime>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Semester = table.Column<int>(nullable: false),
+                    SchoolYearId = table.Column<int>(nullable: false),
+                    TeacherId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Courses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Courses_SchoolYears_SchoolYearId",
+                        column: x => x.SchoolYearId,
+                        principalTable: "SchoolYears",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Courses_Teachers_TeacherId",
+                        column: x => x.TeacherId,
+                        principalTable: "Teachers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CourseDetails",
                 columns: table => new
                 {
@@ -222,25 +282,23 @@ namespace coursesmanagement.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SchoolYearCourse",
+                name: "Attachments",
                 columns: table => new
                 {
-                    SchoolYearId = table.Column<int>(nullable: false),
-                    CourseId = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Key = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    UploadedFileType = table.Column<int>(nullable: false),
+                    CourseDetailId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SchoolYearCourse", x => new { x.SchoolYearId, x.CourseId });
+                    table.PrimaryKey("PK_Attachments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SchoolYearCourse_Courses_CourseId",
-                        column: x => x.CourseId,
-                        principalTable: "Courses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_SchoolYearCourse_SchoolYears_SchoolYearId",
-                        column: x => x.SchoolYearId,
-                        principalTable: "SchoolYears",
+                        name: "FK_Attachments_CourseDetails_CourseDetailId",
+                        column: x => x.CourseDetailId,
+                        principalTable: "CourseDetails",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -250,10 +308,10 @@ namespace coursesmanagement.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "e8669635-a7e1-41b8-ab5a-39d5df25cf5f", "0a3ba4d5-1bce-408c-9c9c-476be98ba8c3", "Admin", "ADMIN" },
-                    { "1303f472-0799-4d22-ab7d-d2ec5663109f", "1746a31f-dfba-4a46-b401-b4cb14196487", "Teacher", "TEACHER" },
-                    { "a2ba65e6-d518-443f-b995-1641dfad7271", "6d73ff0a-c05f-4c0b-b8f6-191af15ef717", "Student", "STUDENT" },
-                    { "61c9d56c-eb7d-42ed-bf9a-bca944bb5536", "5d3fcbac-bdb5-4a6b-bd8f-77b5dcc5030e", "SuperAdmin", "SUPERADMIN" }
+                    { "69aefaa4-ddf1-4dfb-ab8c-18ef9a3582de", "4ca5490d-2528-4aef-aa46-668c9c8995cc", "Admin", "ADMIN" },
+                    { "d9d45437-cbb8-4f6d-b257-c1bd6acc6c81", "f2a076ca-6bbe-44e3-a53c-8ccc702c4e0a", "Teacher", "TEACHER" },
+                    { "676d0f1d-818b-469c-af2b-494322d96c76", "53d597ef-3e8d-411d-9edd-8d6246822cdf", "SuperAdmin", "SUPERADMIN" },
+                    { "d2a38e46-b2e4-40f3-a4dd-3b68a9e98579", "5af323d5-3685-414e-936e-00d63cb8ba62", "Student", "STUDENT" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -296,15 +354,38 @@ namespace coursesmanagement.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Attachments_CourseDetailId",
+                table: "Attachments",
+                column: "CourseDetailId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CourseDetails_CourseId",
                 table: "CourseDetails",
                 column: "CourseId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_SchoolYearCourse_CourseId",
-                table: "SchoolYearCourse",
-                column: "CourseId");
+                name: "IX_Courses_SchoolYearId",
+                table: "Courses",
+                column: "SchoolYearId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Courses_TeacherId",
+                table: "Courses",
+                column: "TeacherId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Students_UserId",
+                table: "Students",
+                column: "UserId",
+                unique: true,
+                filter: "[UserId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Teachers_UserId",
+                table: "Teachers",
+                column: "UserId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -325,22 +406,28 @@ namespace coursesmanagement.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "CourseDetails");
+                name: "Attachments");
 
             migrationBuilder.DropTable(
-                name: "SchoolYearCourse");
+                name: "Students");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "CourseDetails");
 
             migrationBuilder.DropTable(
                 name: "Courses");
 
             migrationBuilder.DropTable(
                 name: "SchoolYears");
+
+            migrationBuilder.DropTable(
+                name: "Teachers");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }

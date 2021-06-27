@@ -169,6 +169,26 @@ namespace coursesmanagement.Services
 
             var addToRoleResult = await _userManager.AddToRolesAsync(newUser, model.Roles);
 
+            foreach (var role in model.Roles)
+            {
+                switch (role)
+                {
+                    case "Teacher":
+                        _context.Teachers.Add(new Teacher()
+                        {
+                            UserId = newUser.Id
+                        });
+                        break;
+
+                    case "Student":
+                        _context.Students.Add(new Student()
+                        {
+                            UserId = newUser.Id
+                        });
+                        break;
+                }
+            }
+
             if (!addToRoleResult.Succeeded)
             {
                 throw new Exception($"Could not add user to role. {string.Join('|', addToRoleResult.Errors.Select(i => i.Description))}");
