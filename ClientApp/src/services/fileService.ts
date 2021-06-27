@@ -8,5 +8,8 @@ export const uploadCoursebook = (formData: FormData) =>
 export const uploadSlide = (formData: FormData) =>
   api.post(`${FILE_URL}/system/slides`, formData)
 
+export const uploadGradesCSV = (formData: FormData) =>
+  api.post(`${FILE_URL}/system/gradesCSV`, formData)
+
 export const removeFile = (key: string) =>
   api.delete(`${FILE_URL}/remove-file`, { params: { key: key } })

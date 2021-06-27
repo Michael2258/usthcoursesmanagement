@@ -23,6 +23,7 @@ namespace coursesmanagement.Data
         public DbSet<Attachment> Attachments { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Student> Students { get; set; }
+        public DbSet<ImportGrades> ImportGrades { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -15,6 +15,7 @@ namespace coursesmanagement.Locators
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<ITeacherService, TeacherService>();
             services.AddScoped<IStudentService, StudentService>();
+            services.AddScoped<IImportGradesService, ImportGradesService>();
         }
     }
 
