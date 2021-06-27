@@ -104,5 +104,20 @@ namespace coursesmanagement.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("grades/{id}")]
+        [Authorize]
+        public object GetCourseGrades([FromRoute] int id)
+        {
+            try
+            {
+                var result = _courseService.GetCourseGrades(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

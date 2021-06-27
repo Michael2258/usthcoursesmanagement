@@ -10,7 +10,7 @@ using coursesmanagement.Dtos.CourseDetails;
 using coursesmanagement.Models;
 using coursesmanagement.Data;
 using coursesmanagement.Dtos.Teacher;
-
+using coursesmanagement.Dtos.Grades;
 namespace coursesmanagement.Services
 {
     public interface ICourseService
@@ -21,6 +21,7 @@ namespace coursesmanagement.Services
         Task<CourseDto> Update(int id, CreateUpdateCourseDto model);
         Task Remove(int id);
         Task RemoveAttachedFile(int attachedId);
+        Task<GradesDto> GetCourseGrades(int courseId);
     }
 
     public class CourseService : ICourseService
@@ -282,8 +283,56 @@ namespace coursesmanagement.Services
 
             _context.Remove(existingAttachedFile);
             await _context.SaveChangesAsync();
+        }
 
+        public async Task<GradesDto> GetCourseGrades(int courseId)
+        {
+            Course existingCourse = await _context.Courses.FirstOrDefaultAsync(i => i.Id == courseId);
 
+            if (existingCourse == default)
+            {
+                throw new Exception("Course does not exist");
+            }
+
+            List<ImportGrades> courseGrades = await _context.ImportGrades
+                .Where(i => i.CourseName.Trim().ToUpper() == existingCourse.Name)
+                .ToListAsync();
+
+            int numberOfStudentInCourse = courseGrades.Count();
+            int sumOfStudentFailedMidtermTest = 0;
+            int sumOfStudentFailedFinalTest = 0;
+            int sumOfStudentFailedFinalResult = 0;
+
+            foreach (var courseGrade in courseGrades)
+            {
+                if (courseGrade.MidtermTest < 10)
+                {
+                    sumOfStudentFailedMidtermTest++;
+                }
+
+                if (courseGrade.FinalTest < 10)
+                {
+                    sumOfStudentFailedFinalTest++;
+                }
+
+                if (courseGrade.FinalResult < 10)
+                {
+                    sumOfStudentFailedFinalResult++;
+                }
+            }
+
+            return new GradesDto
+            {
+                CourseId = existingCourse.Id,
+                MidtermTestFailed = GetPercentage(sumOfStudentFailedMidtermTest, numberOfStudentInCourse),
+                FinalTestFailed = GetPercentage(sumOfStudentFailedFinalTest, numberOfStudentInCourse),
+                FinalResultFailed = GetPercentage(sumOfStudentFailedFinalResult, numberOfStudentInCourse)
+            };
+        }
+
+        private double GetPercentage(int each, int sum)
+        {
+            return ((double)each / (double)sum) * 100;
         }
     }
 }

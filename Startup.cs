@@ -53,6 +53,8 @@ namespace coursesmanagement
             });
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
             services.AddDbContext<USTHCourseDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()

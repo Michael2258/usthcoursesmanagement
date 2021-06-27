@@ -40,14 +40,6 @@ function HeaderComponent() {
                 xs="2"
               >
                 <li>
-                  <a href="">About</a>
-                </li>
-              </Col>
-              <Col
-                className={`${headercomponent["header-component__nav-bar-row-item"]}`}
-                xs="2"
-              >
-                <li>
                   <a href="/admin/user">User</a>
                 </li>
               </Col>
@@ -57,6 +49,14 @@ function HeaderComponent() {
               >
                 <li>
                   <a href="/admin/course">Course</a>
+                </li>
+              </Col>
+              <Col
+                className={`${headercomponent["header-component__nav-bar-row-item"]}`}
+                xs="2"
+              >
+                <li>
+                  <a href="/admin/importCSV">Grades</a>
                 </li>
               </Col>
               <Col
