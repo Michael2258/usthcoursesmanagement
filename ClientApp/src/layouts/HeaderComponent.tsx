@@ -56,7 +56,7 @@ function HeaderComponent() {
                 xs="2"
               >
                 <li>
-                  <a href="/admin/importCSV">Grades</a>
+                  <a href="/admin/grades">Grades</a>
                 </li>
               </Col>
               <Col
