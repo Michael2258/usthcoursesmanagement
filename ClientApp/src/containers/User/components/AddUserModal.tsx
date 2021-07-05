@@ -71,7 +71,7 @@ const AddUserModal = (props: any) => {
                   <Label for="first-name">First Name</Label>
                   <Input
                     type="text"
-                    placeholder="You first name..."
+                    placeholder="Your first name..."
                     name="first-name"
                     value={values?.firstName}
                     onChange={(e: any) =>

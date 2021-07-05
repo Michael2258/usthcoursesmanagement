@@ -1,0 +1,90 @@
+.grades__title {
+  p {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #273896;
+    padding: 20px;
+    width: 100%;
+  }
+}
+
+.grades__sub-title {
+  p {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #5d6cbf;
+    padding: 20px;
+    width: 100%;
+  }
+}
+
+.grades__import-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.grades__import-csv,
+.grades__update-csv {
+  color: transparent;
+  margin-top: 20px;
+}
+
+.grades__import-csv::-webkit-file-upload-button,
+.grades__update-csv::-webkit-file-upload-button {
+  visibility: hidden;
+}
+
+.grades__import-csv::before {
+  content: "Select a csv file";
+  color: #fff;
+  display: inline-block;
+  background: #273896;
+  border: 1px solid #999;
+  border-radius: 3px;
+  padding: 5px 8px;
+  outline: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  cursor: pointer;
+  text-shadow: 1px 1px #fff;
+  font-weight: 500;
+  font-size: 2rem;
+}
+
+.grades__update-csv::before {
+  content: "Update Grades";
+  color: #fff;
+  display: inline-block;
+  background: #273896;
+  border: 1px solid #999;
+  border-radius: 3px;
+  padding: 5px 8px;
+  outline: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  cursor: pointer;
+  text-shadow: 1px 1px #fff;
+  font-weight: 500;
+  font-size: 2rem;
+}
+
+.grades__import-csv:hover::before,
+.grades__update-csv:hover::before {
+  border-color: #273896;
+  background-color: #add8e6;
+  color: #273896;
+}
+
+.grades__update-csv:active::before,
+.grades__import-csv:active::before {
+  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+}
+
+.grades__update-csv:active,
+.grades__import-csv:active {
+  outline: 0;
+}

@@ -61,16 +61,7 @@ namespace coursesmanagement.Services
                 Name = i.Name,
                 Semester = i.Semester,
                 SchoolYear = i.SchoolYear.Year,
-                Teacher = new TeacherDto
-                {
-                    Id = i.Teacher.Id,
-                    UserName = i.Teacher.User.UserName,
-                    FirstName = i.Teacher.User.FirstName,
-                    LastName = i.Teacher.User.LastName,
-                    Email = i.Teacher.User.Email,
-                    Gender = i.Teacher.User.Gender,
-                    Avatar = i.Teacher.User.Avatar
-                }
+                TeacherId = i.TeacherId
             }).ToListAsync();
 
             PagedResponseDto<CourseDto> result = new PagedResponseDto<CourseDto>
@@ -108,16 +99,7 @@ namespace coursesmanagement.Services
                             UploadedFileType = (int)i.UploadedFileType
                         }).ToArray()
                     },
-                    Teacher = new TeacherDto
-                    {
-                        Id = item.Teacher.Id,
-                        FirstName = item.Teacher.User.FirstName,
-                        LastName = item.Teacher.User.LastName,
-                        UserName = item.Teacher.User.UserName,
-                        Email = item.Teacher.User.Email,
-                        Gender = item.Teacher.User.Gender,
-                        Avatar = item.Teacher.User.Avatar
-                    }
+                    TeacherId = item.TeacherId
                 })
                 .FirstOrDefaultAsync(q => q.Id == id);
 
@@ -151,11 +133,6 @@ namespace coursesmanagement.Services
                 throw new Exception("Course already exists.");
             }
 
-            Teacher teacher = await _context.Teachers
-                .Include(i => i.User)
-                .Where(i => i.Id == model.TeacherId)
-                .FirstOrDefaultAsync();
-
             Course newCourse = new Course
             {
                 Name = model.Name,
@@ -166,7 +143,7 @@ namespace coursesmanagement.Services
                 {
                     Description = model.CourseDetail.Description
                 },
-                Teacher = teacher
+                TeacherId = model.TeacherId
             };
 
             await _context.Courses.AddAsync(newCourse);
@@ -177,13 +154,8 @@ namespace coursesmanagement.Services
                 Id = newCourse.Id,
                 Name = newCourse.Name,
                 Semester = newCourse.Semester,
-                Teacher = new TeacherDto
-                {
-                    Id = teacher.Id,
-                    FirstName = teacher.User.FirstName,
-                    LastName = teacher.User.LastName,
-                    Email = teacher.User.Email
-                }
+                SchoolYear = schoolYear.Year,
+                TeacherId = newCourse.TeacherId
             };
         }
 
@@ -214,11 +186,9 @@ namespace coursesmanagement.Services
                 }
             }
 
-            Teacher newTeacher = await _context.Teachers.Include(i => i.User).FirstOrDefaultAsync(i => i.Id == model.TeacherId);
-
             existingCourse.Semester = model.Semester;
             existingCourse.SchoolYear.Year = model.SchoolYear;
-            existingCourse.Teacher = newTeacher;
+            existingCourse.TeacherId = model.TeacherId;
             existingCourse.CourseDetail.Description = model.CourseDetail.Description;
             existingCourse.CourseDetail.Attachments = model.CourseDetail.Attachments.Select(i => new Attachment
             {
@@ -235,13 +205,7 @@ namespace coursesmanagement.Services
                 Id = existingCourse.Id,
                 Name = existingCourse.Name,
                 Semester = existingCourse.Semester,
-                Teacher = new TeacherDto
-                {
-                    FirstName = newTeacher.User.FirstName,
-                    LastName = newTeacher.User.LastName,
-                    Email = newTeacher.User.Email,
-                    Gender = newTeacher.User.Gender
-                },
+                TeacherId = existingCourse.TeacherId,
                 CourseDetail = new CourseDetailDto
                 {
                     Description = existingCourse.CourseDetail.Description,

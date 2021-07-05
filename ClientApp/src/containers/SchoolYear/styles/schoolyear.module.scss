@@ -1,0 +1,87 @@
+.schoolyear__title {
+  p {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #273896;
+    padding: 20px;
+    width: 100%;
+  }
+}
+
+.schoolyear__add {
+  display: flex;
+  align-items: center;
+  padding-bottom: 30px;
+
+  .schoolyear__add-btn {
+    background-color: #add8e6;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid #add8e6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #01d;
+    font-size: 1.4rem;
+
+    &:hover {
+      background-color: #273896;
+      border: 1px solid #273896;
+      color: #fff;
+    }
+  }
+}
+
+// Header
+.schoolyear__header-item-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 40px;
+
+  .schoolyear__header {
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    padding: 10px 20px 10px 2px;
+  }
+}
+
+.schoolyear__header-item-id,
+.schoolyear__header-item-year-wrapper,
+.schoolyear__header-item-course-num-wrapper,
+.schoolyear__header-item-action {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+}
+
+.schoolyear__item-id {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+  }
+}
+
+.schoolyear__item-year-wrapper,
+.schoolyear__item-course-num-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.schoolyear__item-action {
+  display: flex;
+  align-items: center;
+  padding-left: 28px;
+}

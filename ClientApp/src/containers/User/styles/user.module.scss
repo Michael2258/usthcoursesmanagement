@@ -1,0 +1,52 @@
+.userList__title {
+  p {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #273896;
+    padding: 20px;
+    width: 100%;
+  }
+}
+
+.userList__additional {
+  display: flex;
+  align-items: center;
+  padding-bottom: 30px;
+
+  .user__add-btn {
+    background-color: #add8e6;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid #add8e6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #01d;
+    font-size: 1.4rem;
+
+    &:hover {
+      background-color: #273896;
+      border: 1px solid #273896;
+      color: #fff;
+    }
+  }
+
+  .user__search-box {
+    font-size: 1.2rem;
+    color: #000;
+    background-color: #fff;
+    padding: 10px 20px;
+
+    &:focus {
+      border: 1px solid #273896;
+      outline: none;
+    }
+  }
+}
+
+.user__actions {
+  display: flex;
+  justify-content: space-evenly;
+}

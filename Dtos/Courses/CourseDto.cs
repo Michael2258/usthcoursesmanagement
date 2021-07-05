@@ -10,7 +10,7 @@ namespace coursesmanagement.Dtos.Courses
         public string Name { get; set; }
         public int Semester { get; set; }
         public string SchoolYear { get; set; }
-        public TeacherDto Teacher { get; set; }
+        public int TeacherId { get; set; }
         public CourseDetailDto CourseDetail { get; set; }
     }
 }

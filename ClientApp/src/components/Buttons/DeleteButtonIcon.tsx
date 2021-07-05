@@ -11,7 +11,7 @@ const DeleteButtonIcon: FC<Props> = ({ onClick }: Props) => {
       title="Delete"
       onClick={onClick}
     >
-      <FaTrashAlt />
+      <FaTrashAlt style={{ color: "red" }} />
     </div>
   )
 }
