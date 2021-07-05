@@ -5,18 +5,21 @@ import { setAlert, setLoading } from "../../../redux/commons/action"
 import { get, remove } from "../../../services/courseService"
 import { Filter } from "../../../types/Filter"
 import { DEFAULT_FILTER } from "../../../utils/constants"
-
 interface Course {
-  Id: number
-  Name: string
-  Semester: number
+  id: number
+  name: string
+  semester: number
+  schoolYear: string
+  teacherId: number
 }
 
 const initValue = [
   {
-    Id: 0,
-    Name: "",
-    Semester: 0,
+    id: 0,
+    name: "",
+    semester: 0,
+    schoolYear: "",
+    teacherId: 0,
   },
 ]
 
@@ -70,7 +73,13 @@ const useCourseList = () => {
     getData()
   }, [filter])
 
-  return { courseList, changeFilters, removeCourse, goToDetail, filter }
+  return {
+    courseList,
+    changeFilters,
+    removeCourse,
+    goToDetail,
+    filter,
+  }
 }
 
 export default useCourseList

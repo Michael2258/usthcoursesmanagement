@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
 using coursesmanagement.Services;
+using coursesmanagement.Dtos.Grades;
 
 namespace coursesmanagement.Controllers
 {
@@ -31,5 +32,20 @@ namespace coursesmanagement.Controllers
                 throw new Exception(ex.Message);
             }
         }
+
+        [HttpGet("getGradesFromCourse/{courseId}")]
+        public object GetStudentGradesFromCourseId([FromRoute] int courseId)
+        {
+            try
+            {
+                return _service.GetStudentGradesFromCourseId(courseId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
+
+
 }

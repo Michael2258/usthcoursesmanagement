@@ -242,16 +242,14 @@ namespace coursesmanagement.Services
 
         public async Task Remove(string id)
         {
-            var existingModel = await _context.Users.FirstOrDefaultAsync(i => i.Id == id);
+            ApplicationUser existingModel = await _context.Users.FirstOrDefaultAsync(i => i.Id == id);
 
             if (existingModel == default)
             {
                 throw new Exception("User doesn't exist");
             }
 
-            _context.Remove(existingModel);
-
-            await _context.SaveChangesAsync();
+            await _userManager.DeleteAsync(existingModel);
         }
 
     }

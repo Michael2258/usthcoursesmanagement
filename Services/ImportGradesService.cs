@@ -15,6 +15,7 @@ namespace coursesmanagement.Services
     public interface IImportGradesService
     {
         Task ImportGradesFile(IFormFile file, bool isUpdate);
+        Task<List<StudentGradesFromCoursesDto>> GetStudentGradesFromCourseId(int courseId);
     }
     public class ImportGradesService : IImportGradesService
     {
@@ -135,6 +136,30 @@ namespace coursesmanagement.Services
             }
 
             return true;
+        }
+
+        public async Task<List<StudentGradesFromCoursesDto>> GetStudentGradesFromCourseId(int courseId)
+        {
+            Course existingCourse = await _context.Courses.FirstOrDefaultAsync(i => i.Id == courseId);
+
+            if (existingCourse == default)
+            {
+                throw new Exception("Course does not exist.");
+            }
+
+            List<ImportGrades> studentGrades = await _context.ImportGrades.Where(i => i.CourseName.Trim().ToUpper() == existingCourse.Name.Trim().ToUpper()).ToListAsync();
+
+            return studentGrades.Select(i => new StudentGradesFromCoursesDto
+            {
+                StudentId = i.StudentId,
+                CourseName = i.CourseName,
+                FirstName = i.FirstName,
+                LastName = i.LastName,
+                Attendance = i.Attendance,
+                MidtermTest = i.MidtermTest,
+                FinalTest = i.FinalTest,
+                FinalResult = i.FinalResult
+            }).ToList();
         }
     }
 }

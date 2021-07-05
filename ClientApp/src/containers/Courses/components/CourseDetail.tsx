@@ -10,11 +10,13 @@ import AttachmentFile from "./AttachmentFile"
 import { Container } from "reactstrap"
 import course from "../styles/course.module.scss"
 import { FormGroup } from "reactstrap"
+import TeacherSelector from "../../../components/Selectors/TeacherSelector"
 
 const validationSchema = yup.object({
-  Name: yup.string().required("Name is required"),
-  Semester: yup.number().required("Semester is required"),
-  Description: yup.string(),
+  name: yup.string().required("Name is required"),
+  semester: yup.number().required("Semester is required"),
+  schoolYear: yup.string().required("School year is required"),
+  description: yup.string(),
 })
 
 const CourseDetail = () => {
@@ -116,6 +118,33 @@ const CourseDetail = () => {
                   <ErrorHandler text={errors?.semester} />
                 )} */}
               </Row>
+
+              <Row className="mb-2">
+                <Label className={`${course["course-detail__label"]}`}>
+                  School Year
+                </Label>
+                <Input
+                  placeholder="School year"
+                  type="number"
+                  name="schoolYear"
+                  value={values?.schoolYear}
+                  onChange={(e) => setFieldValue("schoolYear", e.target.value)}
+                  onBlur={handleBlur("description")}
+                />
+              </Row>
+
+              <Row className="mb-2 d-flex flex-column">
+                <Label className={`${course["course-detail__label"]}`}>
+                  Lecturer
+                </Label>
+                <div>
+                  <TeacherSelector
+                    value={values.teacherId}
+                    onChange={(e: any) => setFieldValue("teacherId", e.value)}
+                  />
+                </div>
+              </Row>
+
               <Row className="mb-2">
                 <Label className={`${course["course-detail__label"]}`}>
                   Description

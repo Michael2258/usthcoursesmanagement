@@ -1,6 +1,8 @@
 import React, { useState } from "react"
 import { Button } from "reactstrap"
 import DeleteUserModal from "./DeleteUserModal"
+import { FaRegEdit, FaTrashAlt } from "react-icons/fa"
+import user from "../styles/user.module.scss"
 
 const UserBasicInfoItem = (props: any) => {
   const { userInfo, index, deleteUserHandler, getData, toggle } = props
@@ -9,6 +11,8 @@ const UserBasicInfoItem = (props: any) => {
 
   const [idStudentDelete, setIdStudentDelete] = useState<string>("")
 
+  console.log(idStudentDelete)
+
   const toggleDeleteUserModal = (id?: string) => {
     id ? setIdStudentDelete(id) : setIdStudentDelete("")
     setModalDeleteUser(!modalDeleteUser)
@@ -16,8 +20,8 @@ const UserBasicInfoItem = (props: any) => {
 
   const removeUser = (id: string) => {
     deleteUserHandler(id, () => {
-      getData()
       setModalDeleteUser(!modalDeleteUser)
+      getData()
     })
   }
 
@@ -33,18 +37,26 @@ const UserBasicInfoItem = (props: any) => {
         <td>{!!userInfo && userInfo?.userName}</td>
         <td>{!!userInfo && userInfo?.email}</td>
 
-        <td>
-          <Button onClick={() => toggle(userInfo?.id)}>Edit</Button>
-          <Button onClick={() => toggleDeleteUserModal(userInfo?.id)}>
-            Delete
-          </Button>
+        <td className={`${user["user__actions"]}`}>
+          <div
+            className="d-inline text-center cursor-pointer hover-opacity"
+            onClick={() => toggle(userInfo?.id)}
+          >
+            <FaRegEdit style={{ fontSize: "1rem" }} />
+          </div>
+          <div
+            className="d-inline text-center cursor-pointer hover-opacity"
+            onClick={() => toggleDeleteUserModal(userInfo?.id)}
+          >
+            <FaTrashAlt style={{ color: "red", fontSize: "1rem" }} />
+          </div>
         </td>
       </tr>
 
       <DeleteUserModal
         toggleDeleteUserModal={toggleDeleteUserModal}
         modalDeleteUser={modalDeleteUser}
-        cancel={modalDeleteUser}
+        cancel={toggleDeleteUserModal}
         confirm={() => removeUser(idStudentDelete)}
       />
     </React.Fragment>

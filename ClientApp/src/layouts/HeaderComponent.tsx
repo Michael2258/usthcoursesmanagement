@@ -5,6 +5,8 @@ import headercomponent from "../scss/headercomponent.module.scss"
 import TheHeaderDropdown from "./TheHeaderDropdown"
 
 function HeaderComponent() {
+  const history = useHistory()
+
   return (
     <div className={`${headercomponent["header-component__container"]}`}>
       <Col
@@ -12,6 +14,7 @@ function HeaderComponent() {
         className={`${headercomponent[""]} d-flex align-items-center justify-content-center`}
       >
         <div
+          onClick={() => history.push("/admin")}
           className={`${headercomponent["header-component-main-icon__container"]}`}
         >
           <img alt="" src={require("../assets/icons/USTH_logo.png")} />
@@ -32,7 +35,7 @@ function HeaderComponent() {
                 xs="2"
               >
                 <li>
-                  <a href="/admin">Home</a>
+                  <a href="/admin/user">User</a>
                 </li>
               </Col>
               <Col
@@ -40,7 +43,7 @@ function HeaderComponent() {
                 xs="2"
               >
                 <li>
-                  <a href="/admin/user">User</a>
+                  <a href="/admin/schoolyear">SchoolYear</a>
                 </li>
               </Col>
               <Col

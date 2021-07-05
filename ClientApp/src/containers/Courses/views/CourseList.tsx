@@ -51,11 +51,13 @@ const CourseList = () => {
       <Row>
         <Col>
           {!!courseList && courseList.length > 0 ? (
-            <Table bordered hover striped responsive>
+            <Table bordered hover striped>
               <thead className="course-list__table-header">
                 <tr>
                   <th>Course Name</th>
                   <th>Semester</th>
+                  <th>Year</th>
+                  <th>Lecturer</th>
                 </tr>
               </thead>
               <tbody className="course-list__table-body">
@@ -68,6 +70,8 @@ const CourseList = () => {
                       />
                     </td>
                     <td className="align-middle">{course.semester}</td>
+                    <td className="align-middle">{course.schoolYear}</td>
+                    <td className="align-middle">{`${course.teacherId}`}</td>
                     <td className="text-center align-middle">
                       <DeleteButtonIcon onClick={() => onRemove(course.id)} />
                     </td>

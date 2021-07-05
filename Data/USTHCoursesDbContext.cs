@@ -80,12 +80,15 @@ namespace coursesmanagement.Data
             builder.Entity<Teacher>()
                 .HasOne(i => i.User)
                 .WithOne()
-                .HasForeignKey<Teacher>(i => i.UserId);
+                .HasForeignKey<Teacher>(i => i.UserId)
+                .OnDelete(DeleteBehavior.Cascade)
+                ;
 
             builder.Entity<Student>()
                 .HasOne(i => i.User)
                 .WithOne()
-                .HasForeignKey<Student>(i => i.UserId);
+                .HasForeignKey<Student>(i => i.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
         public static void RegisterCoreModels(ModelBuilder builder)
@@ -96,6 +99,7 @@ namespace coursesmanagement.Data
                 .HasForeignKey(e => e.UserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
+
             builder.Entity<ApplicationUser>()
                 .Property(u => u.FullName)
                 .HasComputedColumnSql("[FirstName] + ' ' + [LastName]");

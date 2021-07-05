@@ -39,6 +39,7 @@ namespace coursesmanagement.Services
 
             List<TeacherDto> items = await teachers.Select(i => new TeacherDto
             {
+                Id = i.Id,
                 FirstName = i.User.FirstName,
                 LastName = i.User.LastName,
                 UserName = i.User.UserName,

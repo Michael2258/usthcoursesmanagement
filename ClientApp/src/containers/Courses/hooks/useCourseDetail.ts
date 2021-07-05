@@ -28,16 +28,20 @@ interface CourseDetail {
 }
 
 interface Course {
-  id?: number
+  id: number
   name: string
-  semester: any
+  semester: number
+  schoolYear: string
+  teacherId: number
   courseDetail?: CourseDetail
 }
 
 const initValue: Course = {
   id: 0,
   name: "",
-  semester: null,
+  semester: 0,
+  schoolYear: "",
+  teacherId: 0,
   courseDetail: {
     id: 0,
     description: "",
