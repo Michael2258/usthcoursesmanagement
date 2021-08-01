@@ -1,23 +1,30 @@
-import React from "react"
-import CommonSelector from "./CommonSelector"
+import React from "react";
+import CommonSelector from "./CommonSelector";
 
 const CourseSelector = (props: any) => {
-  const { year, schoolYears, onChange, defaultValue, courses } = props
+  const {
+    year,
+    onChange,
+    defaultValue,
+    selectedStudentYear,
+    courses,
+    schoolYears,
+  } = props;
 
-  const selectedYear = schoolYears.find(
-    (schoolYear: any) => schoolYear?.year === year
-  )
+  const selectedSchoolYear = schoolYears?.find((item: any) => item.id === year);
 
-  const options =
-    year == "all"
-      ? courses.map((course: any) => ({
-          label: course?.name,
-          value: course?.id,
-        }))
-      : selectedYear?.courses.map((course: any) => ({
-          label: course?.name,
-          value: course?.id,
-        }))
+  const filterCourse = courses?.filter(
+    (item: any) => item.schoolYear === selectedSchoolYear?.year
+  );
+
+  const filteredCourses = filterCourse?.filter(
+    (item: any) => item.numYear === selectedStudentYear
+  );
+
+  const options = filteredCourses?.map((course: any) => ({
+    label: course?.name,
+    value: course?.id,
+  }));
 
   return (
     <CommonSelector
@@ -25,7 +32,7 @@ const CourseSelector = (props: any) => {
       options={options}
       onChange={onChange}
     />
-  )
-}
+  );
+};
 
-export default CourseSelector
+export default CourseSelector;

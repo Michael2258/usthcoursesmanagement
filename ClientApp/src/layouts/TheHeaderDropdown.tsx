@@ -1,34 +1,44 @@
-import React, { useCallback } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { useHistory } from "react-router-dom"
+import React, { useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 
-import { setUser } from "../redux/commons/action"
-import { ACCESS_TOKEN } from "../utils/constants"
+import { setUser } from "../redux/commons/action";
+import { ACCESS_TOKEN } from "../utils/constants";
 import {
   CDropdown,
   CDropdownItem,
   CDropdownMenu,
   CDropdownToggle,
   CImg,
-} from "@coreui/react"
-import CIcon from "@coreui/icons-react"
+} from "@coreui/react";
+import CIcon from "@coreui/icons-react";
 
-const DEFAULT_USER_AVATAR = require("../assets/images/default-avatar.jpg")
+const DEFAULT_USER_AVATAR = require("../assets/images/default-avatar.jpg");
 
 const TheHeaderDropdown = () => {
-  const user = useSelector((state: any) => state.commons.user)
-  const dispatch = useDispatch()
-  const history = useHistory()
+  const user = useSelector((state: any) => state.commons.user);
+  const dispatch = useDispatch();
+  const history = useHistory();
 
-  const FullName = user?.firstName.concat(" " + user?.lastName)
+  const FullName = user?.firstName.concat(" " + user?.lastName);
 
   const signOut = useCallback(() => {
-    localStorage.removeItem(ACCESS_TOKEN)
-    dispatch(setUser(null))
-    history.replace("/login")
-  }, [])
+    localStorage.removeItem(ACCESS_TOKEN);
+    dispatch(setUser(null));
+    history.replace("/login");
+  }, []);
 
-  const avatarUrl = DEFAULT_USER_AVATAR
+  const avatarUrl = DEFAULT_USER_AVATAR;
+
+  const handleNavigateToUserProfile = () => {
+    if (user.roles.includes("SuperAdmin", "Admin")) {
+      return;
+    } else if (user.roles.includes("Teacher")) {
+      history.push(`/teacher/user-profile`);
+    } else if (user.roles.includes("Student")) {
+      history.push(`/student/user-profile`);
+    }
+  };
 
   return (
     <CDropdown inNav className="c-header-nav-items mx-2">
@@ -43,7 +53,7 @@ const TheHeaderDropdown = () => {
         </div>
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
-        <CDropdownItem>
+        <CDropdownItem onClick={handleNavigateToUserProfile}>
           <CIcon name="cil-user" className="mfe-2" />
           {user?.email}
         </CDropdownItem>
@@ -53,7 +63,7 @@ const TheHeaderDropdown = () => {
         </CDropdownItem>
       </CDropdownMenu>
     </CDropdown>
-  )
-}
+  );
+};
 
-export default TheHeaderDropdown
+export default TheHeaderDropdown;

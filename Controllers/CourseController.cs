@@ -19,6 +19,20 @@ namespace coursesmanagement.Controllers
             _courseService = courseService;
         }
 
+        [HttpGet("all")]
+        [Authorize]
+        public async Task<object> GetAllCourse()
+        {
+            try
+            {
+                return await _courseService.GetAllCourse();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet]
         [Authorize]
         public async Task<object> Get([FromQuery] int page, [FromQuery] int limit, [FromQuery] string search)

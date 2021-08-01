@@ -1,12 +1,12 @@
-import "bootstrap/dist/css/bootstrap.css"
-import "font-awesome/css/font-awesome.min.css"
-import "css-file-icons/build/css-file-icons.css"
+import "bootstrap/dist/css/bootstrap.css";
+import "font-awesome/css/font-awesome.min.css";
+import "css-file-icons/build/css-file-icons.css";
 
-import * as React from "react"
-import * as ReactDOM from "react-dom"
-import App from "./App"
-import registerServiceWorker from "./registerServiceWorker"
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import App from "./App";
+import registerServiceWorker from "./registerServiceWorker";
 
-ReactDOM.render(<App />, document.getElementById("root"))
+ReactDOM.render(<App />, document.getElementById("root"));
 
-registerServiceWorker()
+registerServiceWorker();

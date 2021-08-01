@@ -25,6 +25,7 @@
     align-items: center;
     color: #01d;
     font-size: 1.4rem;
+    box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.25);
 
     &:hover {
       background-color: #273896;
@@ -49,4 +50,129 @@
 .user__actions {
   display: flex;
   justify-content: space-evenly;
+}
+
+.user__table {
+  border-radius: 10px;
+}
+
+.add-user-modal {
+  .add-user-modal-body {
+    background: #e5f6ff;
+    border-left: 1px solid #fff;
+    border-top: 1px solid #fff;
+    backdrop-filter: blur(10px);
+    padding: 30px;
+  }
+
+  .add-user-modal-first-name,
+  .add-user-modal-last-name,
+  .add-user-modal-username,
+  .add-user-modal-email,
+  .add-user-modal-dob {
+    background: transparent;
+    padding: 1em;
+    border: none;
+    border-radius: 5000px;
+    -webkit-backdrop-filter: blur(5px);
+    box-shadow: 4px 4px 60px rgba(0, 0, 0, 0.3);
+    color: #000;
+    font-family: Montserrat, sans-serif;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 4px 4px 60px 8px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  .add-user-modal-roles {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .add-user-modal-gender {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .add-user-modal-label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #7abee1;
+    text-transform: uppercase;
+  }
+
+  .add-user-modal-btn {
+    color: #7abee1;
+    font-size: 12px;
+    border: 0.3em solid #7abee1;
+    border-radius: 0.5em;
+    width: 12em;
+    height: 3em;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: sans-serif;
+    letter-spacing: 0.1em;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    transition: 0.5s;
+    margin: 1em;
+    background-color: transparent;
+
+    span {
+      position: absolute;
+      width: 25%;
+      height: 100%;
+      background-color: #7abee1;
+      transform: translateY(150%);
+      border-radius: 50%;
+      left: calc((var(--n) - 1) * 25%);
+      transition: 0.5s;
+      transition-delay: calc((var(--n) - 1) * 0.1s);
+      z-index: -1;
+    }
+
+    &:hover {
+      color: #fff;
+    }
+
+    &:hover span {
+      transform: translateY(0) scale(2);
+    }
+
+    span:nth-child(1) {
+      --n: 1;
+    }
+
+    span:nth-child(2) {
+      --n: 2;
+    }
+
+    span:nth-child(3) {
+      --n: 3;
+    }
+
+    span:nth-child(4) {
+      --n: 4;
+    }
+
+    &:nth-child(2) {
+      color: #ccc;
+      border: 0.3em solid #ccc;
+
+      &:hover {
+        color: #fff;
+      }
+
+      span {
+        background-color: #ccc;
+      }
+    }
+  }
 }

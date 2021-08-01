@@ -16,14 +16,29 @@ namespace coursesmanagement.Services
     {
         Task ImportGradesFile(IFormFile file, bool isUpdate);
         Task<List<StudentGradesFromCoursesDto>> GetStudentGradesFromCourseId(int courseId);
+        Task<List<GradesCountDto>> GetGradesCount(int courseId);
+        Task DeleteGrades(int gradeId);
+        Task DeleteAllGrades();
     }
     public class ImportGradesService : IImportGradesService
     {
         private readonly USTHCourseDbContext _context;
 
+
+
         public ImportGradesService(USTHCourseDbContext context)
         {
             _context = context;
+        }
+
+        private List<double> GradeLevelGenerator()
+        {
+            List<double> gradeLevel = new List<double>();
+            for (double i = 0.0; i <= 20.0; i += 0.2)
+            {
+                gradeLevel.Add(Math.Round(i, 1));
+            }
+            return gradeLevel;
         }
 
         public async Task ImportGradesFile(IFormFile file, bool isUpdate)
@@ -84,7 +99,7 @@ namespace coursesmanagement.Services
                         .Where(i => i.CourseName.Trim().ToUpper() == rows[0].Trim().ToUpper())
                         .FirstOrDefault(i => i.StudentId.Trim().ToUpper() == rows[1].Trim().ToUpper());
 
-                    if (!(existingStudent == default))
+                    if (existingStudent != default)
                     {
                         if (!isUpdate)
                         {
@@ -138,6 +153,28 @@ namespace coursesmanagement.Services
             return true;
         }
 
+        public async Task DeleteGrades(int gradeId)
+        {
+            ImportGrades existingGrade = await _context.ImportGrades
+                .Where(i => i.Id == gradeId)
+                .FirstOrDefaultAsync();
+
+            _context.Remove(existingGrade);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAllGrades()
+        {
+            List<ImportGrades> grades = await _context.ImportGrades.ToListAsync();
+
+            foreach (var grade in grades)
+            {
+                _context.Remove(grade);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<List<StudentGradesFromCoursesDto>> GetStudentGradesFromCourseId(int courseId)
         {
             Course existingCourse = await _context.Courses.FirstOrDefaultAsync(i => i.Id == courseId);
@@ -160,6 +197,50 @@ namespace coursesmanagement.Services
                 FinalTest = i.FinalTest,
                 FinalResult = i.FinalResult
             }).ToList();
+        }
+
+        public async Task<List<GradesCountDto>> GetGradesCount(int courseId)
+        {
+            Course existingCourse = await _context.Courses.FirstOrDefaultAsync(i => i.Id == courseId);
+
+            List<GradesCountDto> GradesCount = new List<GradesCountDto>();
+
+            List<double> gradeLevels = GradeLevelGenerator();
+
+            List<double> finalResults = await _context.ImportGrades
+                .AsNoTracking()
+                .Where(i => i.CourseName.Trim().ToUpper() == existingCourse.Name.Trim().ToUpper())
+                .Select(i => i.FinalResult)
+                .ToListAsync();
+
+            foreach (double gradeLevel in gradeLevels)
+            {
+                if (gradeLevel == gradeLevels[gradeLevels.Count - 1])
+                {
+                    IEnumerable<double> result = finalResults.Where(result => result == gradeLevel);
+
+                    int count = result.Count();
+
+                    GradesCount.Add(new GradesCountDto
+                    {
+                        GradeLevel = "20.0",
+                        Count = count
+                    });
+                }
+                else
+                {
+                    IEnumerable<double> result = finalResults.Where(result => result == gradeLevel);
+
+                    int count = result.Count();
+
+                    GradesCount.Add(new GradesCountDto
+                    {
+                        GradeLevel = gradeLevel.ToString(),
+                        Count = count
+                    });
+                }
+            }
+            return GradesCount;
         }
     }
 }

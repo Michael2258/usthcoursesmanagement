@@ -5,6 +5,27 @@
   align-items: center;
 }
 
+.teacherstudent-header-component__container {
+  width: 100%;
+  background-color: lightblue;
+  display: grid;
+  grid-template-columns: 1fr 3fr 0.6fr;
+  margin: 0;
+
+  .header-component__nav-bar-col {
+    align-self: center;
+    justify-self: center;
+  }
+
+  .header-component__nav-bar-row-item:last-child {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+}
+
 .header-component-main-icon__container {
   width: 20%;
   height: 100%;
@@ -41,5 +62,53 @@
         }
       }
     }
+
+    .teacher-header-component__nav-bar-item {
+      a {
+        padding: 10px;
+        border-radius: 10px;
+      }
+    }
   }
+}
+
+@keyframes bounceAlpha {
+  0% {
+    opacity: 1;
+    transform: translateX(0px) scale(1);
+  }
+  25% {
+    opacity: 0;
+    transform: translateX(10px) scale(0.9);
+  }
+  26% {
+    opacity: 0;
+    transform: translateX(-10px) scale(0.9);
+  }
+  55% {
+    opacity: 1;
+    transform: translateX(0px) scale(1);
+  }
+}
+
+.bounceAlpha {
+  animation-name: bounceAlpha;
+  animation-duration: 1.4s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+.right-arrow.bounceAlpha {
+  animation-name: bounceAlpha;
+  animation-duration: 1.4s;
+  animation-delay: 0.2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+.right-arrow-icon-effects .right-arrow {
+  animation-name: bounceAlpha;
+  animation-duration: 1.4s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
 }

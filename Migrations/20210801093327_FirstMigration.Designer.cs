@@ -10,8 +10,8 @@ using coursesmanagement.Data;
 namespace coursesmanagement.Migrations
 {
     [DbContext(typeof(USTHCourseDbContext))]
-    [Migration("20210625092327_AddFirstMigration")]
-    partial class AddFirstMigration
+    [Migration("20210801093327_FirstMigration")]
+    partial class FirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -318,11 +318,17 @@ namespace coursesmanagement.Migrations
                     b.Property<DateTime>("DeletedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Department")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NumYear")
+                        .HasColumnType("int");
 
                     b.Property<int>("SchoolYearId")
                         .HasColumnType("int");
@@ -376,6 +382,54 @@ namespace coursesmanagement.Migrations
                         .IsUnique();
 
                     b.ToTable("CourseDetails");
+                });
+
+            modelBuilder.Entity("coursesmanagement.Models.ImportGrades", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<double>("Attendance")
+                        .HasColumnType("float");
+
+                    b.Property<string>("CourseName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("FinalResult")
+                        .HasColumnType("float");
+
+                    b.Property<double>("FinalTest")
+                        .HasColumnType("float");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("MidtermTest")
+                        .HasColumnType("float");
+
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ImportGrades");
                 });
 
             modelBuilder.Entity("coursesmanagement.Models.SchoolYear", b =>
@@ -556,7 +610,8 @@ namespace coursesmanagement.Migrations
                 {
                     b.HasOne("coursesmanagement.Models.ApplicationUser", "User")
                         .WithOne()
-                        .HasForeignKey("coursesmanagement.Models.Student", "UserId");
+                        .HasForeignKey("coursesmanagement.Models.Student", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("coursesmanagement.Models.Teacher", b =>

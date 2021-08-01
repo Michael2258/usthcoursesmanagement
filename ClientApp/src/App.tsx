@@ -15,6 +15,8 @@ import NotificationModal from "./components/Modals/NotificationModal";
 import CommonAlert from "./components/Alerts/CommonAlert";
 import Loading from "./components/Loading/Loading";
 
+import "./App.css";
+
 // @ts-ignore
 React.icons = icons;
 

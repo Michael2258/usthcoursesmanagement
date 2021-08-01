@@ -45,6 +45,31 @@ namespace coursesmanagement.Controllers
                 throw new Exception(ex.Message);
             }
         }
+
+        [HttpGet("getGradesCount/{courseId}")]
+        public object GetGradesCount([FromRoute] int courseId)
+        {
+            try
+            {
+                return _service.GetGradesCount(courseId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        [HttpDelete("{gradeId}")]
+        public object DeleteGrades([FromRoute] int gradeId)
+        {
+            return _service.DeleteGrades(gradeId);
+        }
+
+        [HttpDelete("deleteAll")]
+        public object DeleteAllGrades()
+        {
+            return _service.DeleteAllGrades();
+        }
     }
 
 
