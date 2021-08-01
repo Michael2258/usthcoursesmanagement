@@ -1,26 +1,27 @@
-import React from "react"
-import { Row, Col, Input, Label, Button } from "reactstrap"
-import { Formik } from "formik"
-import * as yup from "yup"
+import React from "react";
+import { Row, Col, Input, Label, Button } from "reactstrap";
+import { Formik } from "formik";
+import * as yup from "yup";
 
-import useCourseDetail from "../hooks/useCourseDetail"
-import { useParams } from "react-router"
-import ErrorHandler from "../../../components/Alerts/ErrorHandler"
-import AttachmentFile from "./AttachmentFile"
-import { Container } from "reactstrap"
-import course from "../styles/course.module.scss"
-import { FormGroup } from "reactstrap"
-import TeacherSelector from "../../../components/Selectors/TeacherSelector"
+import useCourseDetail from "../hooks/useCourseDetail";
+import { useParams } from "react-router";
+import ErrorHandler from "../../../components/Alerts/ErrorHandler";
+import AttachmentFile from "./AttachmentFile";
+import { Container } from "reactstrap";
+import course from "../styles/course.module.scss";
+import { FormGroup } from "reactstrap";
+import TeacherSelector from "../../../components/Selectors/TeacherSelector";
+import { useHistory } from "react-router-dom";
 
 const validationSchema = yup.object({
   name: yup.string().required("Name is required"),
   semester: yup.number().required("Semester is required"),
   schoolYear: yup.string().required("School year is required"),
   description: yup.string(),
-})
+});
 
 const CourseDetail = () => {
-  const { id } = useParams<{ id: string }>()
+  const { id } = useParams<{ id: string }>();
 
   const {
     courseDetail,
@@ -34,11 +35,14 @@ const CourseDetail = () => {
     setSelectedFileType,
     removeAttachedFile,
     removeFile,
-  } = useCourseDetail(parseInt(id))
+    isTeacher,
+  } = useCourseDetail(parseInt(id));
 
   const submitHandler = (values: any) => {
-    createOrUpdateCourse(values)
-  }
+    createOrUpdateCourse(values);
+  };
+
+  const history = useHistory();
 
   return (
     <Container>
@@ -47,33 +51,33 @@ const CourseDetail = () => {
         enableReinitialize
         validationSchema={validationSchema}
         onSubmit={(values) => {
-          submitHandler(values)
+          submitHandler(values);
         }}
       >
         {(formikProps) => {
           const { values, touched, errors, setFieldValue, handleBlur } =
-            formikProps
+            formikProps;
 
           const courseBooks = values?.courseDetail?.attachments.filter(
             (file) => file.uploadedFileType === 1
-          )
+          );
 
           const courseBookList = fileUpload.filter(
             (file: any) => file.uploadedFileType === 1
-          )
+          );
 
           const slides = values?.courseDetail?.attachments.filter(
             (file) => file.uploadedFileType === 2
-          )
+          );
 
           const slideList = fileUpload.filter(
             (file: any) => file.uploadedFileType === 2
-          )
+          );
 
           const downloadFileHandler = (key: string) => {
-            const url = `/api/file/download?key=${key}`
-            window.open(url, "_blank")
-          }
+            const url = `/api/file/download?key=${key}`;
+            window.open(url, "_blank");
+          };
 
           return (
             <div id="course-detail">
@@ -84,81 +88,100 @@ const CourseDetail = () => {
               </Row>
 
               <Row className="mb-2">
-                <Label className={`${course["course-detail__label"]}`}>
-                  Name
-                </Label>
-                <Input
-                  placeholder="Course name"
-                  type="text"
-                  name="course-name"
-                  value={values.name}
-                  onChange={(e) => setFieldValue("name", e.target.value)}
-                  onBlur={handleBlur("course-name")}
-                  required
-                />
-                {touched.name && errors.name && (
-                  <ErrorHandler text={errors.name} />
-                )}
+                <Col>
+                  <Label className={`${course["course-detail__label"]}`}>
+                    Name
+                  </Label>
+                  <Input
+                    disabled={isTeacher}
+                    className={`${course["course-detail-input"]}`}
+                    placeholder="Course name"
+                    type="text"
+                    name="course-name"
+                    value={values.name}
+                    onChange={(e) => setFieldValue("name", e.target.value)}
+                    onBlur={handleBlur("course-name")}
+                    required
+                  />
+                  {touched.name && errors.name && (
+                    <ErrorHandler text={errors.name} />
+                  )}
+                </Col>
               </Row>
-              <Row className="mb-2">
-                <Label className={`${course["course-detail__label"]}`}>
-                  Semester
-                </Label>
 
-                <Input
-                  placeholder="Semester"
-                  type="number"
-                  name="semester"
-                  value={values.semester}
-                  onChange={(e) => setFieldValue("semester", e.target.value)}
-                  onBlur={handleBlur("semester")}
-                  required
-                />
-                {/* {touched?.semester && errors?.semester && (
+              <Row className="mb-2">
+                <Col>
+                  <Label className={`${course["course-detail__label"]}`}>
+                    Semester
+                  </Label>
+
+                  <Input
+                    disabled={isTeacher}
+                    className={`${course["course-detail-input"]}`}
+                    placeholder="Semester"
+                    type="number"
+                    name="semester"
+                    value={values.semester}
+                    onChange={(e) => setFieldValue("semester", e.target.value)}
+                    onBlur={handleBlur("semester")}
+                    required
+                  />
+                  {/* {touched?.semester && errors?.semester && (
                   <ErrorHandler text={errors?.semester} />
                 )} */}
-              </Row>
+                </Col>
 
-              <Row className="mb-2">
-                <Label className={`${course["course-detail__label"]}`}>
-                  School Year
-                </Label>
-                <Input
-                  placeholder="School year"
-                  type="number"
-                  name="schoolYear"
-                  value={values?.schoolYear}
-                  onChange={(e) => setFieldValue("schoolYear", e.target.value)}
-                  onBlur={handleBlur("description")}
-                />
+                <Col>
+                  <Label className={`${course["course-detail__label"]}`}>
+                    School Year
+                  </Label>
+                  <Input
+                    disabled={isTeacher}
+                    className={`${course["course-detail-input"]}`}
+                    placeholder="School year"
+                    type="number"
+                    name="schoolYear"
+                    value={values?.schoolYear}
+                    onChange={(e) =>
+                      setFieldValue("schoolYear", e.target.value)
+                    }
+                    onBlur={handleBlur("description")}
+                  />
+                </Col>
               </Row>
 
               <Row className="mb-2 d-flex flex-column">
-                <Label className={`${course["course-detail__label"]}`}>
-                  Lecturer
-                </Label>
-                <div>
-                  <TeacherSelector
-                    value={values.teacherId}
-                    onChange={(e: any) => setFieldValue("teacherId", e.value)}
-                  />
-                </div>
+                <Col>
+                  <Label className={`${course["course-detail__label"]}`}>
+                    Lecturer
+                  </Label>
+                  <div>
+                    <TeacherSelector
+                      disabled={isTeacher}
+                      value={values.teacherId}
+                      onChange={(e: any) => setFieldValue("teacherId", e.value)}
+                    />
+                  </div>
+                </Col>
               </Row>
 
               <Row className="mb-2">
-                <Label className={`${course["course-detail__label"]}`}>
-                  Description
-                </Label>
-                <Input
-                  placeholder="Course description"
-                  type="textarea"
-                  name="description"
-                  value={values?.courseDetail?.description}
-                  onChange={(e) =>
-                    setFieldValue("courseDetail.description", e.target.value)
-                  }
-                  onBlur={handleBlur("description")}
-                />
+                <Col>
+                  <Label className={`${course["course-detail__label"]}`}>
+                    Description
+                  </Label>
+                  <Input
+                    className={`${course["course-detail__input-desc"]}`}
+                    placeholder="Course description"
+                    type="textarea"
+                    name="description"
+                    value={values?.courseDetail?.description}
+                    onChange={(e) =>
+                      setFieldValue("courseDetail.description", e.target.value)
+                    }
+                    onBlur={handleBlur("description")}
+                  />
+                </Col>
               </Row>
               {!!id && (
                 <Row>
@@ -217,17 +240,17 @@ const CourseDetail = () => {
                                         values?.courseDetail?.attachments.filter(
                                           (i) => i.name !== attached.name
                                         )
-                                      )
+                                      );
 
-                                      removeFile(attached.key)
+                                      removeFile(attached.key);
 
                                       if (attached.id) {
-                                        removeAttachedFile(attached.id)
+                                        removeAttachedFile(attached.id);
                                       }
                                     }}
                                   />
                                 </Col>
-                              )
+                              );
                             })}
                           {!!courseBookList &&
                             courseBookList.map((file: any, index: number) => (
@@ -242,7 +265,7 @@ const CourseDetail = () => {
                                   )}
                                   label={file.name}
                                   onRemove={() => {
-                                    removeAttachment(file.id, file.name)
+                                    removeAttachment(file.id, file.name);
                                   }}
                                 />
                               </Col>
@@ -301,12 +324,12 @@ const CourseDetail = () => {
                                       values?.courseDetail?.attachments.filter(
                                         (i) => i.name !== attached.name
                                       )
-                                    )
+                                    );
 
-                                    removeFile(attached.key)
+                                    removeFile(attached.key);
 
                                     if (attached.id) {
-                                      removeAttachedFile(attached.id)
+                                      removeAttachedFile(attached.id);
                                     }
                                   }}
                                 />
@@ -350,7 +373,13 @@ const CourseDetail = () => {
                   </Button>
                   <Button
                     size="sm"
-                    onClick={backToList}
+                    onClick={
+                      isTeacher
+                        ? () => {
+                            history.goBack();
+                          }
+                        : backToList
+                    }
                     className={`${course["course-detail__cancel-btn"]} px-4 mr-2 ml-2`}
                   >
                     Cancel
@@ -358,11 +387,11 @@ const CourseDetail = () => {
                 </Col>
               </Row>
             </div>
-          )
+          );
         }}
       </Formik>
     </Container>
-  )
-}
+  );
+};
 
-export default CourseDetail
+export default CourseDetail;

@@ -1,11 +1,11 @@
-import React, { FC, Fragment } from "react"
-import course from "../styles/course.module.scss"
+import React, { FC, Fragment } from "react";
+import course from "../styles/course.module.scss";
 
 interface Props {
-  label: string
-  onRemove: any
-  fileType: string
-  downloadFile?: any
+  label: string;
+  onRemove?: any;
+  fileType: string;
+  downloadFile?: any;
 }
 
 const AttachmentFile: FC<Props> = ({
@@ -46,7 +46,7 @@ const AttachmentFile: FC<Props> = ({
         </div>
       </div>
     </Fragment>
-  )
-}
+  );
+};
 
-export default AttachmentFile
+export default AttachmentFile;

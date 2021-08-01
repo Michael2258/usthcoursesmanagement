@@ -83,13 +83,20 @@ const GradesPage = () => {
               <Row>
                 <Col>
                   <Button
+                    className={`${grades["import-grades-btn"]}`}
                     onClick={() =>
                       history.push(
                         `/admin/grades/importgrades/${selectedCourse}`
                       )
                     }
                   >
-                    Import Grades
+                    <span className={`${grades["arrow-effect"]}`}>
+                      &#62;&#62;&#62;
+                    </span>{" "}
+                    Import Grades{" "}
+                    <span className={`${grades["arrow-effect"]}`}>
+                      &#62;&#62;&#62;
+                    </span>
                   </Button>
                 </Col>
               </Row>

@@ -316,11 +316,17 @@ namespace coursesmanagement.Migrations
                     b.Property<DateTime>("DeletedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Department")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NumYear")
+                        .HasColumnType("int");
 
                     b.Property<int>("SchoolYearId")
                         .HasColumnType("int");

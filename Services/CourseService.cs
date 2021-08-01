@@ -22,6 +22,7 @@ namespace coursesmanagement.Services
         Task Remove(int id);
         Task RemoveAttachedFile(int attachedId);
         Task<GradesDto> GetCourseGrades(int courseId);
+        Task<List<CourseDto>> GetAllCourse();
     }
 
     public class CourseService : ICourseService
@@ -31,6 +32,35 @@ namespace coursesmanagement.Services
         public CourseService(USTHCourseDbContext context)
         {
             _context = context;
+        }
+
+        public async Task<List<CourseDto>> GetAllCourse()
+        {
+            IQueryable<Course> courses = _context.Courses.AsNoTracking();
+
+            List<CourseDto> items = await courses.Select(i => new CourseDto
+            {
+                Id = i.Id,
+                Name = i.Name,
+                Semester = i.Semester,
+                NumYear = (int)i.NumYear,
+                Department = (int)i.Department,
+                SchoolYear = i.SchoolYear.Year,
+                TeacherId = i.TeacherId,
+                CourseDetail = new CourseDetailDto
+                {
+                    Description = i.CourseDetail.Description,
+                    Attachments = i.CourseDetail.Attachments.Select(i => new AttachmentDto
+                    {
+                        Id = i.Id,
+                        Name = i.Name,
+                        Key = i.Key,
+                        UploadedFileType = (int)i.UploadedFileType
+                    }).ToArray()
+                }
+            }).ToListAsync();
+
+            return items;
         }
 
         public async Task<PagedResponseDto<CourseDto>> Get(int page, int limit, string search)
@@ -60,6 +90,8 @@ namespace coursesmanagement.Services
                 Id = i.Id,
                 Name = i.Name,
                 Semester = i.Semester,
+                NumYear = (int)i.NumYear,
+                Department = (int)i.Department,
                 SchoolYear = i.SchoolYear.Year,
                 TeacherId = i.TeacherId
             }).ToListAsync();
@@ -86,6 +118,8 @@ namespace coursesmanagement.Services
                     Name = item.Name,
                     Semester = item.Semester,
                     SchoolYear = item.SchoolYear.Year,
+                    NumYear = (int)item.NumYear,
+                    Department = (int)item.Department,
                     CourseDetail = new CourseDetailDto
                     {
                         Id = item.CourseDetail.Id,
@@ -139,6 +173,8 @@ namespace coursesmanagement.Services
                 Semester = model.Semester,
                 SchoolYearId = schoolYear.Id,
                 SchoolYear = schoolYear,
+                NumYear = model.NumYear,
+                Department = model.Department,
                 CourseDetail = new CourseDetail
                 {
                     Description = model.CourseDetail.Description
@@ -190,6 +226,8 @@ namespace coursesmanagement.Services
             existingCourse.SchoolYear.Year = model.SchoolYear;
             existingCourse.TeacherId = model.TeacherId;
             existingCourse.CourseDetail.Description = model.CourseDetail.Description;
+            existingCourse.Department = model.Department;
+            existingCourse.NumYear = model.NumYear;
             existingCourse.CourseDetail.Attachments = model.CourseDetail.Attachments.Select(i => new Attachment
             {
                 Id = i.Id ?? default,
@@ -204,6 +242,8 @@ namespace coursesmanagement.Services
             {
                 Id = existingCourse.Id,
                 Name = existingCourse.Name,
+                Department = existingCourse.Department,
+                NumYear = existingCourse.NumYear,
                 Semester = existingCourse.Semester,
                 TeacherId = existingCourse.TeacherId,
                 CourseDetail = new CourseDetailDto

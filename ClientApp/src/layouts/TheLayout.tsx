@@ -13,11 +13,14 @@ import firstCheckToken from "../utils/firstCheckToken";
 import { getInfo } from "../services/accountService";
 import { useMemo } from "react";
 import canAccess from "../utils/canAccessRoute";
+import TeacherStudentHeaderComponent from "./TeacherStudentHeaderComponent";
 
 const TheLayout = ({ routes }: any) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const user = useSelector((state: any) => state.commons.user);
+
+  const isAdmin = user?.roles?.includes("SuperAdmin", "Admin");
 
   const authRoutes = useMemo(() => {
     return routes.filter((route: any) => canAccess(user?.roles, route.roles));
@@ -59,10 +62,10 @@ const TheLayout = ({ routes }: any) => {
   }
 
   return (
-    <div className="c-app c-default-layout">
-      <div className="c-wrapper">
-        <HeaderComponent />
-        <div className="c-body bg-white">
+    <div style={{ height: "100%" }} className="c-app c-default-layout">
+      <div className="c-wrapper" style={{ height: "100%" }}>
+        {isAdmin ? <HeaderComponent /> : <TeacherStudentHeaderComponent />}
+        <div className="c-body bg-white" style={{ height: "100%" }}>
           <TheContent routes={authRoutes} />
         </div>
       </div>

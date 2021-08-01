@@ -10,9 +10,12 @@ import {
   Label,
   Input,
   CustomInput,
+  Row,
+  Col,
 } from "reactstrap"
 import { Formik } from "formik"
 import * as yup from "yup"
+import user from "../styles/user.module.scss"
 
 type UserBasicInfo = {
   userName: string
@@ -64,41 +67,65 @@ const AddUserModal = (props: any) => {
 
         return (
           <Modal isOpen={modal} toggle={toggle} className={className}>
-            <ModalHeader toggle={toggle}>{headerText}</ModalHeader>
-            <ModalBody>
+            <ModalBody className={`${user["add-user-modal-body"]}`}>
               <Form>
-                <FormGroup>
-                  <Label for="first-name">First Name</Label>
-                  <Input
-                    type="text"
-                    placeholder="Your first name..."
-                    name="first-name"
-                    value={values?.firstName}
-                    onChange={(e: any) =>
-                      setFieldValue("firstName", e.target.value)
-                    }
-                    onBlur={handleBlur}
-                    required
-                  />
-                </FormGroup>
+                <Row>
+                  <Col>
+                    <FormGroup>
+                      <Label
+                        className={`${user["add-user-modal-label"]}`}
+                        for="first-name"
+                      >
+                        First Name <span style={{ color: "red" }}>*</span>
+                      </Label>
+                      <Input
+                        className={`${user["add-user-modal-first-name"]}`}
+                        type="text"
+                        placeholder="Your first name..."
+                        name="first-name"
+                        value={values?.firstName}
+                        onChange={(e: any) =>
+                          setFieldValue("firstName", e.target.value)
+                        }
+                        onBlur={handleBlur}
+                        required
+                      />
+                    </FormGroup>
+                  </Col>
+
+                  <Col>
+                    <FormGroup>
+                      <Label
+                        className={`${user["add-user-modal-label"]}`}
+                        for="last-name"
+                      >
+                        Last Name <span style={{ color: "red" }}>*</span>
+                      </Label>
+                      <Input
+                        className={`${user["add-user-modal-last-name"]}`}
+                        type="text"
+                        placeholder="Your last name..."
+                        name="last-name"
+                        value={values?.lastName}
+                        onChange={(e: any) =>
+                          setFieldValue("lastName", e.target.value)
+                        }
+                        onBlur={handleBlur}
+                        required
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
 
                 <FormGroup>
-                  <Label for="last-name">Last Name</Label>
+                  <Label
+                    className={`${user["add-user-modal-label"]}`}
+                    for="user-name"
+                  >
+                    User Name <span style={{ color: "red" }}>*</span>
+                  </Label>
                   <Input
-                    type="text"
-                    placeholder="Your last name..."
-                    name="last-name"
-                    value={values?.lastName}
-                    onChange={(e: any) =>
-                      setFieldValue("lastName", e.target.value)
-                    }
-                    onBlur={handleBlur}
-                    required
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <Label for="user-name">User Name</Label>
-                  <Input
+                    className={`${user["add-user-modal-username"]}`}
                     type="text"
                     placeholder="Your user name..."
                     name="user-name"
@@ -110,9 +137,60 @@ const AddUserModal = (props: any) => {
                     required
                   />
                 </FormGroup>
+
                 <FormGroup>
-                  <Label for="email">Email</Label>
+                  <Label
+                    className={`${user["add-user-modal-label"]}`}
+                    for="gender"
+                  >
+                    Gender <span style={{ color: "red" }}>*</span>
+                  </Label>
+                  <div className={`${user["add-user-modal-gender"]}`}>
+                    <CustomInput
+                      type="radio"
+                      id="gender-male"
+                      name="gender"
+                      label="Male"
+                      value="Male"
+                      checked={values?.gender === "Male"}
+                      onChange={(e: any) =>
+                        setFieldValue("gender", e.target.value)
+                      }
+                    />
+                    <CustomInput
+                      type="radio"
+                      id="gender-female"
+                      name="gender"
+                      label="Female"
+                      value="Female"
+                      checked={values?.gender === "Female"}
+                      onChange={(e: any) =>
+                        setFieldValue("gender", e.target.value)
+                      }
+                    />
+                    <CustomInput
+                      type="radio"
+                      id="gender-others"
+                      name="gender"
+                      label="Others"
+                      value="Others"
+                      checked={values?.gender === "Others"}
+                      onChange={(e: any) =>
+                        setFieldValue("gender", e.target.value)
+                      }
+                    />
+                  </div>
+                </FormGroup>
+
+                <FormGroup>
+                  <Label
+                    className={`${user["add-user-modal-label"]}`}
+                    for="email"
+                  >
+                    Email <span style={{ color: "red" }}>*</span>
+                  </Label>
                   <Input
+                    className={`${user["add-user-modal-email"]}`}
                     type="email"
                     placeholder="Your email..."
                     name="email"
@@ -125,82 +203,58 @@ const AddUserModal = (props: any) => {
                   />
                 </FormGroup>
                 <FormGroup>
-                  <Label for="roles">Roles</Label>
-                  <CustomInput
-                    type="radio"
-                    id="role-admin"
-                    name="roles"
-                    label="Admin"
-                    value="Admin"
-                    checked={values?.roles.includes("Admin")}
-                    onChange={(e: any) => {
-                      setFieldValue("roles", [e.target.value])
-                    }}
-                  />
-                  <CustomInput
-                    type="radio"
-                    id="role-teacher"
-                    name="roles"
-                    label="Teacher"
-                    value="Teacher"
-                    checked={values?.roles.includes("Teacher")}
-                    onChange={(e: any) =>
-                      setFieldValue("roles", [e.target.value])
-                    }
-                  />
-                  <CustomInput
-                    type="radio"
-                    id="role-student"
-                    name="roles"
-                    label="Student"
-                    value="Student"
-                    checked={values?.roles.includes("Student")}
-                    onChange={(e: any) =>
-                      setFieldValue("roles", [e.target.value])
-                    }
-                  />
+                  <Label
+                    className={`${user["add-user-modal-label"]}`}
+                    for="roles"
+                  >
+                    Roles <span style={{ color: "red" }}>*</span>
+                  </Label>
+                  <div className={`${user["add-user-modal-roles"]}`}>
+                    <CustomInput
+                      type="radio"
+                      id="role-admin"
+                      name="roles"
+                      label="Admin"
+                      value="Admin"
+                      checked={values?.roles.includes("Admin")}
+                      onChange={(e: any) => {
+                        setFieldValue("roles", [e.target.value])
+                      }}
+                    />
+                    <CustomInput
+                      type="radio"
+                      id="role-teacher"
+                      name="roles"
+                      label="Teacher"
+                      value="Teacher"
+                      checked={values?.roles.includes("Teacher")}
+                      onChange={(e: any) =>
+                        setFieldValue("roles", [e.target.value])
+                      }
+                    />
+                    <CustomInput
+                      type="radio"
+                      id="role-student"
+                      name="roles"
+                      label="Student"
+                      value="Student"
+                      checked={values?.roles.includes("Student")}
+                      onChange={(e: any) =>
+                        setFieldValue("roles", [e.target.value])
+                      }
+                    />
+                  </div>
                 </FormGroup>
 
                 <FormGroup>
-                  <Label for="gender">Gender</Label>
-                  <CustomInput
-                    type="radio"
-                    id="gender-male"
-                    name="gender"
-                    label="Male"
-                    value="Male"
-                    checked={values?.gender === "Male"}
-                    onChange={(e: any) =>
-                      setFieldValue("gender", e.target.value)
-                    }
-                  />
-                  <CustomInput
-                    type="radio"
-                    id="gender-female"
-                    name="gender"
-                    label="Female"
-                    value="Female"
-                    checked={values?.gender === "Female"}
-                    onChange={(e: any) =>
-                      setFieldValue("gender", e.target.value)
-                    }
-                  />
-                  <CustomInput
-                    type="radio"
-                    id="gender-others"
-                    name="gender"
-                    label="Others"
-                    value="Others"
-                    checked={values?.gender === "Others"}
-                    onChange={(e: any) =>
-                      setFieldValue("gender", e.target.value)
-                    }
-                  />
-                </FormGroup>
-
-                <FormGroup>
-                  <Label for="avatar">Date Of Birth</Label>
+                  <Label
+                    className={`${user["add-user-modal-label"]}`}
+                    for="avatar"
+                  >
+                    Date Of Birth
+                  </Label>
                   <Input
+                    className={`${user["add-user-modal-dob"]}`}
                     type="date"
                     name="date"
                     id="date"
@@ -212,7 +266,12 @@ const AddUserModal = (props: any) => {
                 </FormGroup>
 
                 <FormGroup>
-                  <Label for="avatar">Avatar</Label>
+                  <Label
+                    className={`${user["add-user-modal-label"]}`}
+                    for="avatar"
+                  >
+                    Avatar
+                  </Label>
                   <Input
                     type="file"
                     name="avatar"
@@ -227,14 +286,25 @@ const AddUserModal = (props: any) => {
             </ModalBody>
             <ModalFooter>
               <Button
+                className={`${user["add-user-modal-btn"]}`}
                 type="submit"
-                color="primary"
                 onClick={() => handleSubmit()}
               >
                 Add
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
               </Button>{" "}
-              <Button color="secondary" onClick={onCancel}>
+              <Button
+                onClick={onCancel}
+                className={`${user["add-user-modal-btn"]}`}
+              >
                 Cancel
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
               </Button>
             </ModalFooter>
           </Modal>

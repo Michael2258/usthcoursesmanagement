@@ -160,7 +160,6 @@ namespace coursesmanagement
                 }
             });
             context.Database.Migrate();
-            // SeedData.Initialize(context, userManager, roleManager).Wait();
         }
     }
 }

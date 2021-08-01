@@ -72,7 +72,7 @@ const UserControlPage = () => {
 
       <Row>
         {!!userList && userList.length > 0 ? (
-          <Table bordered hover striped responsive>
+          <Table className={`${user["user__table"]}`} bordered hover striped>
             <thead className={`${user["user__table-header"]}`}>
               <tr>
                 <th>#</th>
@@ -121,6 +121,7 @@ const UserControlPage = () => {
         userDetail={userDetail}
         createOrUpdate={createData}
         userId={userId}
+        className={`${user["add-user-modal"]}`}
       />
     </Container>
   )

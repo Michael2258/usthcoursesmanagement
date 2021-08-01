@@ -1,11 +1,12 @@
-import React from "react"
-import { NavLink, useHistory } from "react-router-dom"
-import { Col, Row } from "reactstrap"
-import headercomponent from "../scss/headercomponent.module.scss"
-import TheHeaderDropdown from "./TheHeaderDropdown"
+import React from "react";
+import { useSelector } from "react-redux";
+import { NavLink, useHistory } from "react-router-dom";
+import { Col, Row } from "reactstrap";
+import headercomponent from "../scss/headercomponent.module.scss";
+import TheHeaderDropdown from "./TheHeaderDropdown";
 
 function HeaderComponent() {
-  const history = useHistory()
+  const history = useHistory();
 
   return (
     <div className={`${headercomponent["header-component__container"]}`}>
@@ -43,7 +44,7 @@ function HeaderComponent() {
                 xs="2"
               >
                 <li>
-                  <a href="/admin/schoolyear">SchoolYear</a>
+                  <a href="/admin/schoolyear">School Year</a>
                 </li>
               </Col>
               <Col
@@ -75,7 +76,7 @@ function HeaderComponent() {
         </div>
       </Col>
     </div>
-  )
+  );
 }
 
-export default HeaderComponent
+export default HeaderComponent;

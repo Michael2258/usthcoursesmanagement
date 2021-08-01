@@ -2,11 +2,12 @@ import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { setAlert, setLoading } from "../../../redux/commons/action";
-import { get } from "../../../services/courseService";
+import { getAll } from "../../../services/courseService";
 import {
   uploadGradesCSVfile,
   updateGradesCSVfile,
   getStudentGradesFromCourseId,
+  getGradesCount,
 } from "../../../services/importCSVService";
 
 interface Course {
@@ -16,9 +17,20 @@ interface Course {
   schoolYear: string;
   teacherId: number;
   courseDetail?: CourseDetail;
+  numYear: number;
+  department: number;
 }
 
-interface CourseDetail {}
+interface CourseDetail {
+  description: string;
+  attachments: Attachments[];
+}
+
+interface Attachments {
+  uploadedFileType: number;
+  key: string;
+  name: string;
+}
 
 interface StudentGrades {
   studentId: string;
@@ -30,15 +42,22 @@ interface StudentGrades {
   finalResult: number;
 }
 
+interface GradesCount {
+  gradeLevel: number;
+  count: number;
+}
+
 const useGrades = () => {
   const dispatch = useDispatch();
   const [courses, setCourses] = useState<Course[]>([]);
+
+  const [gradesCount, setGradesCount] = useState<GradesCount[]>([]);
 
   const { courseId } = useParams<{ courseId: string }>();
 
   const [studentGrades, setStudentGrades] = useState<StudentGrades[]>([]);
 
-  const selectedCourse = courses.find(
+  const selectedCourse = courses?.find(
     (course: any) => course.id === Number(courseId)
   );
 
@@ -46,8 +65,8 @@ const useGrades = () => {
     dispatch(setLoading(true));
 
     try {
-      const res = await get({ page: 1, limit: 10000, search: "" });
-      setCourses(res.data.items);
+      const res = await getAll();
+      setCourses(res.data);
     } catch (err) {
       dispatch(setAlert({ type: "danger", message: err.Message }));
     }
@@ -110,8 +129,22 @@ const useGrades = () => {
     dispatch(setLoading(false));
   }, [courseId]);
 
+  const getGradesCountHandler = useCallback(async () => {
+    dispatch(setLoading(true));
+
+    try {
+      const res = await getGradesCount(Number(courseId));
+      setGradesCount(res.data.result);
+    } catch (err) {
+      dispatch(setAlert({ type: "danger", message: err.Message }));
+    }
+
+    dispatch(setLoading(false));
+  }, []);
+
   useEffect(() => {
     getAllCourses();
+    getGradesCountHandler();
     !!courseId && getStudentGradesHandler();
   }, [courseId]);
 
@@ -121,6 +154,8 @@ const useGrades = () => {
     UpdateGradesCSVFileHandler,
     studentGrades,
     selectedCourse,
+    gradesCount,
+    courseId,
   };
 };
 

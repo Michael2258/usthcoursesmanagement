@@ -1,53 +1,51 @@
-import React from "react"
-import CommonSelector from "./CommonSelector"
-import { getTeacherForSelector } from "../../services/teacherService"
-import { useCallback } from "react"
-import { useDispatch } from "react-redux"
-import { setAlert, setLoading } from "../../redux/commons/action"
-import { useState } from "react"
-import { useEffect } from "react"
+import React from "react";
+import CommonSelector from "./CommonSelector";
+import { getTeacherForSelector } from "../../services/teacherService";
+import { useCallback } from "react";
+import { useDispatch } from "react-redux";
+import { setAlert, setLoading } from "../../redux/commons/action";
+import { useState } from "react";
+import { useEffect } from "react";
 
-const TeacherSelector = ({ value, onChange }: any) => {
-  const dispatch = useDispatch()
+const TeacherSelector = ({ value, onChange, disabled }: any) => {
+  const dispatch = useDispatch();
 
-  const [teachers, setTeachers] = useState([])
+  const [teachers, setTeachers] = useState([]);
 
   const getTeacherForSelectorHandler = useCallback(async () => {
-    dispatch(setLoading(true))
+    dispatch(setLoading(true));
 
     try {
-      const res = await getTeacherForSelector()
-      setTeachers(res.data)
+      const res = await getTeacherForSelector();
+      setTeachers(res.data);
     } catch (err) {
-      dispatch(setAlert(err.message))
+      dispatch(setAlert(err.message));
     }
 
-    dispatch(setLoading(false))
-  }, [])
+    dispatch(setLoading(false));
+  }, []);
 
   useEffect(() => {
-    getTeacherForSelectorHandler()
-  }, [])
+    getTeacherForSelectorHandler();
+  }, []);
 
   const options = teachers.map((teacher: any) => {
-    const fullName = `${teacher.firstName} ${teacher.lastName}`
+    const fullName = `${teacher.firstName} ${teacher.lastName}`;
 
     return {
       value: teacher.id,
       label: fullName,
-    }
-  })
-
-  console.log(options)
-  console.log(value)
+    };
+  });
 
   return (
     <CommonSelector
+      isDisabled={disabled}
       defaultValue={value}
       options={options}
       onChange={onChange}
     />
-  )
-}
+  );
+};
 
-export default TeacherSelector
+export default TeacherSelector;
